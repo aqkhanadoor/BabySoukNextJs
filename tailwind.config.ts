@@ -52,6 +52,12 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				'baby-pink': 'hsl(var(--baby-pink))',
+				'baby-blue': 'hsl(var(--baby-blue))',
+				'baby-yellow': 'hsl(var(--baby-yellow))',
+				'baby-green': 'hsl(var(--baby-green))',
+				'baby-purple': 'hsl(var(--baby-purple))',
+				'baby-orange': 'hsl(var(--baby-orange))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -84,11 +90,28 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'wiggle': {
+					'0%, 100%': { transform: 'rotate(-3deg)' },
+					'50%': { transform: 'rotate(3deg)' },
 				}
+			},
+			backgroundImage: {
+				'gradient-rainbow': 'var(--gradient-rainbow)',
+				'gradient-hero': 'var(--gradient-hero)',
+				'gradient-card': 'var(--gradient-card)',
+			},
+			boxShadow: {
+				'playful': 'var(--shadow-playful)',
+				'card': 'var(--shadow-card)',
+				'button': 'var(--shadow-button)',
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'bounce-gentle': 'bounce 2s infinite',
+				'pulse-soft': 'pulse 3s ease-in-out infinite',
+				'wiggle': 'wiggle 1s ease-in-out infinite',
 			}
 		}
 	},
