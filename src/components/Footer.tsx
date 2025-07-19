@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Twitter } from "lucide-react";
+import { MapPin, Phone, Mail, Clock } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -15,17 +15,6 @@ const Footer = () => {
               Your trusted partner in providing the best products for your little ones. 
               Quality, safety, and love in every product.
             </p>
-            <div className="flex space-x-4">
-              <Button variant="ghost" size="icon" className="text-background hover:text-baby-pink">
-                <Facebook className="h-5 w-5" />
-              </Button>
-              <Button variant="ghost" size="icon" className="text-background hover:text-baby-blue">
-                <Instagram className="h-5 w-5" />
-              </Button>
-              <Button variant="ghost" size="icon" className="text-background hover:text-baby-yellow">
-                <Twitter className="h-5 w-5" />
-              </Button>
-            </div>
           </div>
 
           {/* Quick Links */}
