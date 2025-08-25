@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Search, Menu, MapPin, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useCart } from "@/contexts/CartContext";
 
 const Header = () => {
+  const { state } = useCart();
+
   return (
     <header className="w-full bg-background shadow-card sticky top-0 z-50">
       {/* Top bar with contact info */}
@@ -59,9 +62,11 @@ const Header = () => {
             <Link to="/cart">
               <Button variant="ghost" size="icon" className="relative">
                 <ShoppingCart className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 bg-baby-pink text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  0
-                </span>
+                {state.itemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-baby-pink text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {state.itemCount}
+                  </span>
+                )}
               </Button>
             </Link>
             <Button variant="ghost" size="icon" className="md:hidden">

@@ -7,10 +7,24 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { products } from "@/data/products";
 import { ShoppingCart, Heart, Share2, ArrowLeft, Star, Shield, Truck, RotateCcw } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
+import { useToast } from "@/hooks/use-toast";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const { addToCart } = useCart();
+  const { toast } = useToast();
   const product = products.find(p => p.id === id);
+
+  const handleAddToCart = () => {
+    if (product) {
+      addToCart(product);
+      toast({
+        title: "Added to cart!",
+        description: `${product.name} has been added to your cart.`,
+      });
+    }
+  };
 
   if (!product) {
     return (
@@ -142,6 +156,7 @@ const ProductDetail = () => {
                     size="lg" 
                     className="flex-1"
                     disabled={!product.inStock}
+                    onClick={handleAddToCart}
                   >
                     <ShoppingCart className="h-5 w-5 mr-2" />
                     Add to Cart

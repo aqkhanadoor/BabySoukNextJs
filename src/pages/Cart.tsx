@@ -5,31 +5,23 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import { Link } from "react-router-dom";
-
-// Mock cart data - in a real app this would come from state management
-const cartItems = [
-  {
-    id: "1",
-    name: "Soft Plush Teddy Bear",
-    price: 899,
-    quantity: 2,
-    image: "/placeholder.svg"
-  },
-  {
-    id: "2", 
-    name: "Organic Cotton Baby Onesie",
-    price: 599,
-    quantity: 1,
-    image: "/placeholder.svg"
-  }
-];
+import { useCart } from "@/contexts/CartContext";
 
 const Cart = () => {
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const { state, updateQuantity, removeFromCart } = useCart();
+  const subtotal = state.total;
   const shipping = subtotal > 999 ? 0 : 99;
   const total = subtotal + shipping;
 
-  if (cartItems.length === 0) {
+  const handleQuantityChange = (productId: string, newQuantity: number) => {
+    if (newQuantity < 1) {
+      removeFromCart(productId);
+    } else {
+      updateQuantity(productId, newQuantity);
+    }
+  };
+
+  if (state.items.length === 0) {
     return (
       <div className="min-h-screen bg-background">
         <Header />
@@ -65,35 +57,50 @@ const Cart = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Cart Items */}
             <div className="lg:col-span-2 space-y-4">
-              {cartItems.map((item) => (
-                <Card key={item.id} className="p-6">
+              {state.items.map((item) => (
+                <Card key={item.product.id} className="p-6">
                   <div className="flex items-center gap-4">
                     {/* Product Image */}
-                    <img 
-                      src={item.image} 
-                      alt={item.name}
-                      className="w-20 h-20 object-cover rounded-lg bg-gradient-subtle"
-                    />
+                    <Link to={`/product/${item.product.id}`}>
+                      <img 
+                        src={item.product.image} 
+                        alt={item.product.name}
+                        className="w-20 h-20 object-cover rounded-lg bg-gradient-subtle hover:scale-105 transition-transform cursor-pointer"
+                      />
+                    </Link>
                     
                     {/* Product Details */}
                     <div className="flex-1">
-                      <h3 className="font-semibold text-lg text-foreground mb-2">
-                        {item.name}
-                      </h3>
+                      <Link to={`/product/${item.product.id}`}>
+                        <h3 className="font-semibold text-lg text-foreground mb-2 hover:text-primary transition-colors cursor-pointer">
+                          {item.product.name}
+                        </h3>
+                      </Link>
                       <p className="text-xl font-bold text-primary">
-                        ₹{item.price}
+                        ₹{item.product.specialPrice}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {item.product.category} • {item.product.subcategory}
                       </p>
                     </div>
 
                     {/* Quantity Controls */}
                     <div className="flex items-center gap-3">
-                      <Button variant="outline" size="icon">
+                      <Button 
+                        variant="outline" 
+                        size="icon"
+                        onClick={() => handleQuantityChange(item.product.id, item.quantity - 1)}
+                      >
                         <Minus className="h-4 w-4" />
                       </Button>
                       <span className="w-12 text-center font-semibold">
                         {item.quantity}
                       </span>
-                      <Button variant="outline" size="icon">
+                      <Button 
+                        variant="outline" 
+                        size="icon"
+                        onClick={() => handleQuantityChange(item.product.id, item.quantity + 1)}
+                      >
                         <Plus className="h-4 w-4" />
                       </Button>
                     </div>
@@ -101,9 +108,14 @@ const Cart = () => {
                     {/* Total Price */}
                     <div className="text-right">
                       <p className="text-xl font-bold text-primary">
-                        ₹{item.price * item.quantity}
+                        ₹{item.product.specialPrice * item.quantity}
                       </p>
-                      <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="text-destructive hover:text-destructive"
+                        onClick={() => removeFromCart(item.product.id)}
+                      >
                         <Trash2 className="h-4 w-4 mr-1" />
                         Remove
                       </Button>
@@ -122,7 +134,7 @@ const Cart = () => {
                 
                 <CardContent className="p-0 space-y-4">
                   <div className="flex justify-between">
-                    <span>Subtotal ({cartItems.length} items)</span>
+                    <span>Subtotal ({state.itemCount} items)</span>
                     <span className="font-semibold">₹{subtotal}</span>
                   </div>
                   

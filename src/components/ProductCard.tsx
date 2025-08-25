@@ -4,13 +4,25 @@ import { Badge } from "@/components/ui/badge";
 import { ShoppingCart, Zap } from "lucide-react";
 import { Product } from "@/data/products";
 import { Link } from "react-router-dom";
+import { useCart } from "@/contexts/CartContext";
+import { useToast } from "@/hooks/use-toast";
 
 interface ProductCardProps {
   product: Product;
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
+  const { addToCart } = useCart();
+  const { toast } = useToast();
   const discountPercentage = Math.round(((product.mrp - product.specialPrice) / product.mrp) * 100);
+
+  const handleAddToCart = () => {
+    addToCart(product);
+    toast({
+      title: "Added to cart!",
+      description: `${product.name} has been added to your cart.`,
+    });
+  };
 
   return (
     <Card className="group hover:shadow-playful transition-all duration-300 hover:-translate-y-1 bg-card border border-border/50">
@@ -75,6 +87,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
             variant="outline" 
             className="flex-1 group-hover:border-primary transition-colors"
             disabled={!product.inStock}
+            onClick={handleAddToCart}
           >
             <ShoppingCart className="h-4 w-4 mr-2" />
             Add to Cart
@@ -83,6 +96,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
             variant="default" 
             className="flex-1"
             disabled={!product.inStock}
+            onClick={handleAddToCart}
           >
             <Zap className="h-4 w-4 mr-2" />
             Buy Now
