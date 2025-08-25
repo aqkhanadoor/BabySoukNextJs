@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import ProductCard from "./ProductCard";
 import { products } from "@/data/products";
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const ProductsSection = () => {
   return (
@@ -27,10 +28,12 @@ const ProductsSection = () => {
 
         {/* View All Button */}
         <div className="text-center">
-          <Button variant="hero" size="lg" className="group">
-            View All Products
-            <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
-          </Button>
+          <Link to="/products">
+            <Button variant="hero" size="lg" className="group">
+              View All Products
+              <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </Link>
         </div>
       </div>
     </section>
