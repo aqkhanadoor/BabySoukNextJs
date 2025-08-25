@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Baby, Shirt, Heart } from "lucide-react";
+import { Link } from "react-router-dom";
 import toysImage from "@/assets/toys-category.jpg";
 import clothingImage from "@/assets/clothing-category.jpg";
 import careImage from "@/assets/care-category.jpg";
@@ -12,7 +13,8 @@ const categories = [
     image: toysImage,
     icon: Baby,
     color: "baby-pink",
-    items: "500+ Products"
+    items: "500+ Products",
+    category: "Toys"
   },
   {
     id: 2,
@@ -21,7 +23,8 @@ const categories = [
     image: clothingImage,
     icon: Shirt,
     color: "baby-blue",
-    items: "300+ Products"
+    items: "300+ Products",
+    category: "Clothing"
   },
   {
     id: 3,
@@ -30,7 +33,8 @@ const categories = [
     image: careImage,
     icon: Heart,
     color: "baby-green",
-    items: "200+ Products"
+    items: "200+ Products",
+    category: "Care"
   },
 ];
 
@@ -51,9 +55,10 @@ const CategorySection = () => {
         {/* Categories grid */}
         <div className="grid md:grid-cols-3 gap-8">
           {categories.map((category) => (
-            <div
+            <Link
               key={category.id}
-              className="group relative bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-playful transition-all duration-300 transform hover:-translate-y-2"
+              to={`/products?category=${encodeURIComponent(category.category)}`}
+              className="group relative bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-playful transition-all duration-300 transform hover:-translate-y-2 block"
             >
               {/* Image */}
               <div className="relative h-64 overflow-hidden">
@@ -91,7 +96,7 @@ const CategorySection = () => {
 
               {/* Hover effect overlay */}
               <div className="absolute inset-0 bg-gradient-hero opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
-            </div>
+            </Link>
           ))}
         </div>
 
