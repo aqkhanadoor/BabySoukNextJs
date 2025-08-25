@@ -102,10 +102,12 @@ const CategorySection = () => {
 
         {/* View all categories button */}
         <div className="text-center mt-12">
-          <Button variant="hero" size="lg">
-            View All Categories
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
+          <Link to="/products">
+            <Button variant="hero" size="lg">
+              View All Products
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

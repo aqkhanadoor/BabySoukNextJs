@@ -78,33 +78,20 @@ const Header = () => {
         {/* Navigation menu */}
         <nav className="hidden md:flex mt-4 space-x-8">
           <Link to="/">
-            <Button variant="ghost" className="text-base font-medium">
+            <Button variant="ghost" className="text-base font-medium hover:text-primary transition-colors">
               Home
             </Button>
           </Link>
           <Link to="/products">
-            <Button variant="ghost" className="text-base font-medium">
+            <Button variant="ghost" className="text-base font-medium hover:text-primary transition-colors">
               Products
             </Button>
           </Link>
-          <Button variant="ghost" className="text-base font-medium">
-            Toys
-          </Button>
-          <Button variant="ghost" className="text-base font-medium">
-            Clothing
-          </Button>
-          <Button variant="ghost" className="text-base font-medium">
-            Baby Care
-          </Button>
-          <Button variant="ghost" className="text-base font-medium">
-            Feeding
-          </Button>
-          <Button variant="ghost" className="text-base font-medium">
-            Furniture
-          </Button>
-          <Button variant="ghost" className="text-base font-medium">
-            Sale
-          </Button>
+          <Link to="/collections">
+            <Button variant="ghost" className="text-base font-medium hover:text-primary transition-colors">
+              Collections
+            </Button>
+          </Link>
         </nav>
       </div>
     </header>
