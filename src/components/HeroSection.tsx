@@ -41,11 +41,6 @@ const HeroSection = () => {
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Link to="/categories">
-                <Button variant="outline" size="xl" className="bg-white/10 border-white text-white hover:bg-white hover:text-primary">
-                  View Collections
-                </Button>
-              </Link>
             </div>
             
             {/* Features */}
