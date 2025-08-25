@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Search, Menu, MapPin, Phone } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -28,9 +29,11 @@ const Header = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <h1 className="text-3xl font-bold bg-gradient-rainbow bg-clip-text text-transparent animate-pulse-soft">
-              Baby Souk
-            </h1>
+            <Link to="/">
+              <h1 className="text-3xl font-bold bg-gradient-rainbow bg-clip-text text-transparent animate-pulse-soft hover:scale-105 transition-transform cursor-pointer">
+                Baby Souk
+              </h1>
+            </Link>
             <div className="ml-2 text-xs text-muted-foreground">
               Your Little One's Paradise
             </div>
@@ -53,12 +56,14 @@ const Header = () => {
             <Button variant="ghost" size="icon" className="md:hidden">
               <Search className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="relative">
-              <ShoppingCart className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 bg-baby-pink text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                0
-              </span>
-            </Button>
+            <Link to="/cart">
+              <Button variant="ghost" size="icon" className="relative">
+                <ShoppingCart className="h-5 w-5" />
+                <span className="absolute -top-1 -right-1 bg-baby-pink text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  0
+                </span>
+              </Button>
+            </Link>
             <Button variant="ghost" size="icon" className="md:hidden">
               <Menu className="h-5 w-5" />
             </Button>
@@ -67,9 +72,16 @@ const Header = () => {
 
         {/* Navigation menu */}
         <nav className="hidden md:flex mt-4 space-x-8">
-          <Button variant="ghost" className="text-base font-medium">
-            Home
-          </Button>
+          <Link to="/">
+            <Button variant="ghost" className="text-base font-medium">
+              Home
+            </Button>
+          </Link>
+          <Link to="/products">
+            <Button variant="ghost" className="text-base font-medium">
+              Products
+            </Button>
+          </Link>
           <Button variant="ghost" className="text-base font-medium">
             Toys
           </Button>
