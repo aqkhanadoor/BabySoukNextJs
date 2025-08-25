@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Products from "./pages/Products";
 import Collections from "./pages/Collections";
 import Categories from "./pages/Categories";
+import SearchResults from "./pages/SearchResults";
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import NotFound from "./pages/NotFound";
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/products" element={<Products />} />
             <Route path="/collections" element={<Collections />} />
             <Route path="/categories" element={<Categories />} />
+            <Route path="/search" element={<SearchResults />} />
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/cart" element={<Cart />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

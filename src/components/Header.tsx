@@ -1,15 +1,34 @@
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Search, Menu, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { useState } from "react";
 
 const Header = () => {
   const { state } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
+      setSearchTerm("");
+    }
+  };
+
+  const handleMobileSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
+      setSearchTerm("");
+      setIsMobileMenuOpen(false);
+    }
   };
 
   return (
@@ -74,16 +93,18 @@ const Header = () => {
           </nav>
 
           {/* Search Bar */}
-          <div className="flex flex-1 max-w-md mx-6">
+          <form onSubmit={handleSearch} className="flex flex-1 max-w-md mx-6">
             <div className="relative w-full">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <input
                 type="text"
                 placeholder="Search products..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-input rounded-full focus:outline-none focus:ring-2 focus:ring-primary shadow-card"
               />
             </div>
-          </div>
+          </form>
 
           {/* Cart Icon */}
           <Link to="/cart">
@@ -137,16 +158,18 @@ const Header = () => {
               </Link>
               
               {/* Mobile Search */}
-              <div className="pt-4">
+              <form onSubmit={handleMobileSearch} className="pt-4">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                   <input
                     type="text"
                     placeholder="Search products..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full pl-10 pr-4 py-3 border border-input rounded-full focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
-              </div>
+              </form>
             </nav>
           </div>
         </div>
