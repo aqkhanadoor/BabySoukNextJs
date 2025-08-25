@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Search, Menu, MapPin, Phone } from "lucide-react";
+import { ShoppingCart, Search, Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 
@@ -8,25 +8,6 @@ const Header = () => {
 
   return (
     <header className="w-full bg-background shadow-card sticky top-0 z-50">
-      {/* Top bar with contact info */}
-      <div className="bg-gradient-hero text-primary-foreground py-2">
-        <div className="container mx-auto px-4 flex justify-between items-center text-sm">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1">
-              <MapPin className="h-3 w-3" />
-              <span>C.P Complex, Agastiamuzhi, Mukkam, Kerala 673572</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Phone className="h-3 w-3" />
-              <span>7907943740</span>
-            </div>
-          </div>
-          <div className="hidden md:block">
-            <span>Free Delivery on Orders Above ₹999</span>
-          </div>
-        </div>
-      </div>
-
       {/* Main navigation */}
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
