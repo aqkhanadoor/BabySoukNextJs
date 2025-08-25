@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, Zap } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { Product } from "@/data/products";
 import { Link } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
@@ -80,28 +80,17 @@ const ProductCard = ({ product }: ProductCardProps) => {
         </div>
       </CardContent>
 
-      <CardFooter className="p-4 pt-0 space-y-2">
-        {/* Action Buttons */}
-        <div className="flex gap-2 w-full">
-          <Button 
-            variant="outline" 
-            className="flex-1 group-hover:border-primary transition-colors"
-            disabled={!product.inStock}
-            onClick={handleAddToCart}
-          >
-            <ShoppingCart className="h-4 w-4 mr-2" />
-            Add to Cart
-          </Button>
-          <Button 
-            variant="default" 
-            className="flex-1"
-            disabled={!product.inStock}
-            onClick={handleAddToCart}
-          >
-            <Zap className="h-4 w-4 mr-2" />
-            Buy Now
-          </Button>
-        </div>
+      <CardFooter className="p-4 pt-0">
+        {/* Action Button */}
+        <Button 
+          variant="default" 
+          className="w-full group-hover:shadow-button transition-all"
+          disabled={!product.inStock}
+          onClick={handleAddToCart}
+        >
+          <ShoppingCart className="h-4 w-4 mr-2" />
+          Add to Cart
+        </Button>
       </CardFooter>
     </Card>
   );
