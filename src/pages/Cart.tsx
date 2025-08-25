@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
+import whatsappIcon from "@/assets/whatsapp-icon.png";
 
 const Cart = () => {
   const { state, updateQuantity, removeFromCart } = useCart();
@@ -19,6 +20,35 @@ const Cart = () => {
     } else {
       updateQuantity(productId, newQuantity);
     }
+  };
+
+  const handleWhatsAppCheckout = () => {
+    const phoneNumber = "919526542902";
+    const baseUrl = window.location.origin;
+    
+    // Create message with cart items
+    let message = "Hello! I would like to place an order:\n\n";
+    
+    state.items.forEach((item, index) => {
+      const productUrl = `${baseUrl}/product/${item.product.id}`;
+      message += `${index + 1}. ${item.product.name}\n`;
+      message += `   Link: ${productUrl}\n`;
+      message += `   Quantity: ${item.quantity}\n`;
+      message += `   Price: ₹${item.product.specialPrice} each\n`;
+      message += `   Total: ₹${item.product.specialPrice * item.quantity}\n\n`;
+    });
+    
+    message += `Subtotal: ₹${subtotal}\n`;
+    message += `Shipping: ${shipping === 0 ? "Free" : `₹${shipping}`}\n`;
+    message += `Total Amount: ₹${total}\n\n`;
+    message += "Please confirm my order. Thank you!";
+    
+    // Encode message for URL
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    
+    // Open WhatsApp
+    window.open(whatsappUrl, "_blank");
   };
 
   if (state.items.length === 0) {
@@ -162,8 +192,18 @@ const Cart = () => {
                     <span className="text-primary">₹{total}</span>
                   </div>
                   
-                  <Button variant="hero" size="lg" className="w-full mt-6">
-                    Proceed to Checkout
+                  <Button 
+                    variant="hero" 
+                    size="lg" 
+                    className="w-full mt-6 flex items-center justify-center gap-3"
+                    onClick={handleWhatsAppCheckout}
+                  >
+                    <img 
+                      src={whatsappIcon} 
+                      alt="WhatsApp" 
+                      className="w-6 h-6"
+                    />
+                    Checkout through WhatsApp
                   </Button>
                   
                   <Link to="/products">
