@@ -32,7 +32,7 @@ const Header = () => {
                 Products
               </Button>
             </Link>
-            <Link to="/collections">
+            <Link to="/categories">
               <Button variant="ghost" className="text-base font-medium hover:text-primary transition-colors">
                 Collections
               </Button>
