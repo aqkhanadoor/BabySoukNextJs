@@ -1,9 +1,67 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Star, Gift } from "lucide-react";
+import { ArrowRight, Star, Gift, Percent, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroBanner from "@/assets/hero-banner.jpg";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const HeroSection = () => {
+  const heroSlides = [
+    // Slide 1 - Main Hero
+    {
+      id: 1,
+      title: "Welcome to",
+      highlight: "Baby Souk",
+      description: "Discover the magical world of baby essentials! From adorable toys to comfortable clothing and essential care products - everything your little one needs is right here.",
+      buttonText: "Shop Now",
+      buttonLink: "/products",
+      badge1: { text: "New Arrivals!", bg: "bg-baby-pink", position: "-top-4 -right-4" },
+      badge2: { text: "Best Prices!", bg: "bg-baby-yellow", position: "-bottom-4 -left-4" },
+      features: [
+        { text: "Safe & Certified Products", color: "bg-baby-yellow" },
+        { text: "Free Home Delivery", color: "bg-baby-blue" },
+        { text: "Easy Returns", color: "bg-baby-green" }
+      ]
+    },
+    // Slide 2 - Special Offers
+    {
+      id: 2,
+      title: "Special",
+      highlight: "Offers",
+      description: "Get amazing discounts on premium baby products! Up to 50% off on selected items. Limited time offer - don't miss out on these incredible deals!",
+      buttonText: "View Offers",
+      buttonLink: "/products",
+      badge1: { text: "50% OFF", bg: "bg-baby-green", position: "-top-4 -right-4" },
+      badge2: { text: "Limited Time!", bg: "bg-baby-pink", position: "-bottom-4 -left-4" },
+      features: [
+        { text: "Up to 50% Discount", color: "bg-baby-pink" },
+        { text: "Premium Quality", color: "bg-baby-green" },
+        { text: "Limited Stock", color: "bg-baby-yellow" }
+      ]
+    },
+    // Slide 3 - Flash Sale
+    {
+      id: 3,
+      title: "Flash",
+      highlight: "Sale",
+      description: "24-hour flash sale on baby essentials! Huge savings on toys, clothing, and care products. Grab your favorites before they're gone!",
+      buttonText: "Shop Sale",
+      buttonLink: "/products",
+      badge1: { text: "24H Only!", bg: "bg-baby-blue", position: "-top-4 -right-4" },
+      badge2: { text: "Huge Savings!", bg: "bg-baby-green", position: "-bottom-4 -left-4" },
+      features: [
+        { text: "24 Hour Sale", color: "bg-baby-blue" },
+        { text: "Huge Discounts", color: "bg-baby-pink" },
+        { text: "Fast Checkout", color: "bg-baby-green" }
+      ]
+    }
+  ];
+
   return (
     <section className="relative min-h-[500px] md:min-h-[600px] bg-gradient-hero overflow-hidden">
       {/* Background decorations */}
@@ -20,66 +78,68 @@ const HeroSection = () => {
       </div>
 
       <div className="container mx-auto px-4 py-12 md:py-20">
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          {/* Text content */}
-          <div className="text-center md:text-left">
-            <h1 className="text-4xl md:text-6xl font-bold text-primary-foreground mb-6 leading-tight">
-              Welcome to
-              <span className="block text-baby-yellow animate-pulse-soft">
-                Baby Souk
-              </span>
-            </h1>
-            <p className="text-lg md:text-xl text-primary-foreground/90 mb-8 leading-relaxed">
-              Discover the magical world of baby essentials! From adorable toys to 
-              comfortable clothing and essential care products - everything your little 
-              one needs is right here.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <Link to="/products">
-                <Button variant="hero" size="xl" className="group">
-                  Shop Now
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
-            </div>
-            
-            {/* Features */}
-            <div className="mt-8 flex flex-wrap gap-6 justify-center md:justify-start text-sm text-primary-foreground/80">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-baby-yellow rounded-full"></div>
-                <span>Safe & Certified Products</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-baby-blue rounded-full"></div>
-                <span>Free Home Delivery</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-baby-green rounded-full"></div>
-                <span>Easy Returns</span>
-              </div>
-            </div>
-          </div>
+        <Carousel className="w-full" opts={{ loop: true }}>
+          <CarouselContent>
+            {heroSlides.map((slide) => (
+              <CarouselItem key={slide.id}>
+                <div className="grid md:grid-cols-2 gap-8 items-center">
+                  {/* Text content */}
+                  <div className="text-center md:text-left">
+                    <h1 className="text-4xl md:text-6xl font-bold text-primary-foreground mb-6 leading-tight">
+                      {slide.title}
+                      <span className="block text-baby-yellow animate-pulse-soft">
+                        {slide.highlight}
+                      </span>
+                    </h1>
+                    <p className="text-lg md:text-xl text-primary-foreground/90 mb-8 leading-relaxed">
+                      {slide.description}
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                      <Link to={slide.buttonLink}>
+                        <Button variant="hero" size="xl" className="group">
+                          {slide.buttonText}
+                          <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                        </Button>
+                      </Link>
+                    </div>
+                    
+                    {/* Features */}
+                    <div className="mt-8 flex flex-wrap gap-6 justify-center md:justify-start text-sm text-primary-foreground/80">
+                      {slide.features.map((feature, index) => (
+                        <div key={index} className="flex items-center gap-2">
+                          <div className={`w-2 h-2 ${feature.color} rounded-full`}></div>
+                          <span>{feature.text}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
 
-          {/* Image */}
-          <div className="relative">
-            <div className="relative rounded-2xl overflow-hidden shadow-playful transform hover:scale-105 transition-transform duration-300">
-              <img
-                src={heroBanner}
-                alt="Baby products and toys"
-                className="w-full h-auto object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-            </div>
-            
-            {/* Floating elements */}
-            <div className="absolute -top-4 -right-4 bg-baby-pink text-white px-4 py-2 rounded-full shadow-button animate-bounce-gentle">
-              <span className="text-sm font-bold">New Arrivals!</span>
-            </div>
-            <div className="absolute -bottom-4 -left-4 bg-baby-yellow text-foreground px-4 py-2 rounded-full shadow-button animate-pulse-soft">
-              <span className="text-sm font-bold">Best Prices!</span>
-            </div>
-          </div>
-        </div>
+                  {/* Image */}
+                  <div className="relative">
+                    <div className="relative rounded-2xl overflow-hidden shadow-playful transform hover:scale-105 transition-transform duration-300">
+                      <img
+                        src={heroBanner}
+                        alt="Baby products and toys"
+                        className="w-full h-auto object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                    </div>
+                    
+                    {/* Floating elements */}
+                    <div className={`absolute ${slide.badge1.position} ${slide.badge1.bg} text-white px-4 py-2 rounded-full shadow-button animate-bounce-gentle`}>
+                      <span className="text-sm font-bold">{slide.badge1.text}</span>
+                    </div>
+                    <div className={`absolute ${slide.badge2.position} ${slide.badge2.bg} text-foreground px-4 py-2 rounded-full shadow-button animate-pulse-soft`}>
+                      <span className="text-sm font-bold">{slide.badge2.text}</span>
+                    </div>
+                  </div>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="left-4" />
+          <CarouselNext className="right-4" />
+        </Carousel>
       </div>
     </section>
   );
