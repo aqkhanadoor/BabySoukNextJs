@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Star, Gift, Percent, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import heroBanner from "@/assets/hero-banner.jpg";
 import {
   Carousel,
@@ -9,8 +10,12 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import type { CarouselApi } from "@/components/ui/carousel";
 
 const HeroSection = () => {
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+
   const heroSlides = [
     // Slide 1 - Main Hero
     {
@@ -62,6 +67,32 @@ const HeroSection = () => {
     }
   ];
 
+  // Auto-swipe functionality
+  useEffect(() => {
+    if (!api) return;
+
+    const interval = setInterval(() => {
+      api.scrollNext();
+    }, 4000); // Change slide every 4 seconds
+
+    return () => clearInterval(interval);
+  }, [api]);
+
+  // Track current slide
+  useEffect(() => {
+    if (!api) return;
+
+    setCurrent(api.selectedScrollSnap());
+
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap());
+    });
+  }, [api]);
+
+  const scrollTo = (index: number) => {
+    api?.scrollTo(index);
+  };
+
   return (
     <section className="relative min-h-[500px] md:min-h-[600px] bg-gradient-hero overflow-hidden">
       {/* Background decorations */}
@@ -78,7 +109,11 @@ const HeroSection = () => {
       </div>
 
       <div className="container mx-auto px-4 py-12 md:py-20">
-        <Carousel className="w-full" opts={{ loop: true }}>
+        <Carousel 
+          className="w-full" 
+          opts={{ loop: true }}
+          setApi={setApi}
+        >
           <CarouselContent>
             {heroSlides.map((slide) => (
               <CarouselItem key={slide.id}>
@@ -140,6 +175,22 @@ const HeroSection = () => {
           <CarouselPrevious className="left-4" />
           <CarouselNext className="right-4" />
         </Carousel>
+
+        {/* Dot Indicators */}
+        <div className="flex justify-center mt-8 gap-2">
+          {heroSlides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => scrollTo(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                current === index
+                  ? "bg-baby-yellow shadow-lg scale-125"
+                  : "bg-white/30 hover:bg-white/50"
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );
