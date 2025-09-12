@@ -3,12 +3,26 @@ import { useSearchParams } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
-import { products, categories } from "@/data/products";
+import { products as staticProducts, categories, type Product } from "@/data/products";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search, Filter, X } from "lucide-react";
+import { db } from "@/lib/firebase";
+import { onValue, ref as dbRef } from "firebase/database";
+
+type FBProductRecord = {
+  name: string;
+  price: number;
+  discountRate?: number | null;
+  category?: string;
+  subcategory?: string | null;
+  description?: string;
+  images?: string[];
+  createdAt?: number | Record<string, unknown>;
+  stock?: number;
+};
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -17,6 +31,8 @@ const Products = () => {
   const [selectedSubcategory, setSelectedSubcategory] = useState("all");
   const [priceRange, setPriceRange] = useState("all");
   const [sortBy, setSortBy] = useState("featured");
+  const [remoteProducts, setRemoteProducts] = useState<Product[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
   // Initialize filters from URL parameters
   useEffect(() => {
@@ -33,9 +49,50 @@ const Products = () => {
     return category?.subcategories || [];
   }, [selectedCategory]);
 
+  // Load products from Firebase
+  useEffect(() => {
+    const ref = dbRef(db, "products");
+    const unsub = onValue(ref, (snap) => {
+      const val = snap.val() as Record<string, FBProductRecord> | null;
+      if (!val) {
+        setRemoteProducts([]);
+        setLoaded(true);
+        return;
+      }
+      const mapped: Product[] = Object.entries(val).map(([key, p]) => {
+        const price = Number(p.price ?? 0);
+        const dr = typeof p.discountRate === "number" ? p.discountRate : 0;
+        const mrp = price;
+        const specialPrice = dr ? Math.round(price * (100 - dr) / 100) : price;
+        const image = Array.isArray(p.images) && p.images[0] ? p.images[0] : "/placeholder.svg";
+        const createdAtNum = typeof p.createdAt === "number" ? p.createdAt : 0;
+        const dateStr = createdAtNum ? new Date(createdAtNum).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10);
+        return {
+          id: key,
+          name: p.name,
+          mrp,
+          specialPrice,
+          image,
+          description: p.description || "",
+          category: p.category || "Misc",
+          subcategory: p.subcategory || "",
+          inStock: typeof p.stock === "number" ? p.stock > 0 : true,
+          dateAdded: dateStr,
+        };
+      });
+      // Sort newest first by createdAt (derived via dateAdded)
+      mapped.sort((a, b) => new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime());
+      setRemoteProducts(mapped);
+      setLoaded(true);
+    });
+    return () => unsub();
+  }, []);
+
   // Filter and sort products
+  const dataSource: Product[] = remoteProducts.length > 0 ? remoteProducts : staticProducts;
+
   const filteredProducts = useMemo(() => {
-    let filtered = products.filter(product => {
+    let filtered = dataSource.filter(product => {
       // Search filter
       if (searchTerm && !product.name.toLowerCase().includes(searchTerm.toLowerCase())) {
         return false;
@@ -83,7 +140,7 @@ const Products = () => {
       default:
         return filtered;
     }
-  }, [searchTerm, selectedCategory, selectedSubcategory, priceRange, sortBy]);
+  }, [dataSource, searchTerm, selectedCategory, selectedSubcategory, priceRange, sortBy]);
 
   const clearFilters = () => {
     setSearchTerm("");
@@ -103,7 +160,7 @@ const Products = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main className="py-8 px-4">
         <div className="max-w-7xl mx-auto">
           {/* Page Header */}
@@ -197,8 +254,8 @@ const Products = () => {
 
                 {/* Clear Filters */}
                 {activeFiltersCount > 0 && (
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     onClick={clearFilters}
                     className="whitespace-nowrap"
                   >
@@ -214,8 +271,8 @@ const Products = () => {
                   {searchTerm && (
                     <Badge variant="secondary" className="gap-1">
                       Search: "{searchTerm}"
-                      <X 
-                        className="h-3 w-3 cursor-pointer" 
+                      <X
+                        className="h-3 w-3 cursor-pointer"
                         onClick={() => setSearchTerm("")}
                       />
                     </Badge>
@@ -223,8 +280,8 @@ const Products = () => {
                   {selectedCategory !== "all" && (
                     <Badge variant="secondary" className="gap-1">
                       Category: {selectedCategory}
-                      <X 
-                        className="h-3 w-3 cursor-pointer" 
+                      <X
+                        className="h-3 w-3 cursor-pointer"
                         onClick={() => setSelectedCategory("all")}
                       />
                     </Badge>
@@ -232,8 +289,8 @@ const Products = () => {
                   {selectedSubcategory !== "all" && (
                     <Badge variant="secondary" className="gap-1">
                       Subcategory: {selectedSubcategory}
-                      <X 
-                        className="h-3 w-3 cursor-pointer" 
+                      <X
+                        className="h-3 w-3 cursor-pointer"
                         onClick={() => setSelectedSubcategory("all")}
                       />
                     </Badge>
@@ -241,8 +298,8 @@ const Products = () => {
                   {priceRange !== "all" && (
                     <Badge variant="secondary" className="gap-1">
                       Price: ₹{priceRange.replace("-", " - ₹")}
-                      <X 
-                        className="h-3 w-3 cursor-pointer" 
+                      <X
+                        className="h-3 w-3 cursor-pointer"
                         onClick={() => setPriceRange("all")}
                       />
                     </Badge>

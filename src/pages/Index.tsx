@@ -4,6 +4,8 @@ import CategorySection from "@/components/CategorySection";
 import ProductsSection from "@/components/ProductsSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import Footer from "@/components/Footer";
+import SecondaryHero from "@/components/SecondaryHero";
+import ThirdHero from "@/components/ThirdHero";
 
 const Index = () => {
   return (
@@ -11,7 +13,9 @@ const Index = () => {
       <Header />
       <HeroSection />
       <CategorySection />
+      <SecondaryHero />
       <ProductsSection />
+      <ThirdHero />
       <FeaturesSection />
       <Footer />
     </div>

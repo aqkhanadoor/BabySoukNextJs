@@ -12,6 +12,16 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
+  const slugify = (text: string) =>
+    text
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-");
+  const slug = (product as any).slug ? (product as any).slug : slugify(product.name);
+  const categorySegment = product.category ? slugify(product.category) : "product";
+  const productHref = `/${categorySegment}/${slug}`;
   const { addToCart } = useCart();
   const { toast } = useToast();
   const discountPercentage = Math.round(((product.mrp - product.specialPrice) / product.mrp) * 100);
@@ -28,10 +38,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
     <Card className="group hover:shadow-playful transition-all duration-300 hover:-translate-y-1 bg-card border border-border/50">
       <CardContent className="p-4">
         {/* Product Image */}
-        <Link to={`/product/${product.id}`}>
+        <Link to={productHref}>
           <div className="relative mb-4 overflow-hidden rounded-lg bg-gradient-subtle cursor-pointer">
-            <img 
-              src={product.image} 
+            <img
+              src={product.image}
               alt={product.name}
               className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
             />
@@ -50,12 +60,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
         {/* Product Info */}
         <div className="space-y-2">
-          <Link to={`/product/${product.id}`}>
+          <Link to={productHref}>
             <h3 className="font-semibold text-lg leading-tight line-clamp-2 text-foreground hover:text-primary transition-colors cursor-pointer">
               {product.name}
             </h3>
           </Link>
-          
+
           {/* Price Section */}
           <div className="flex items-center gap-2">
             <span className="text-2xl font-bold text-primary">
@@ -82,8 +92,8 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
       <CardFooter className="p-4 pt-0">
         {/* Action Button */}
-        <Button 
-          variant="default" 
+        <Button
+          variant="default"
           className="w-full group-hover:shadow-button transition-all"
           disabled={!product.inStock}
           onClick={handleAddToCart}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  This is a placeholder sitemap. The application Admin panel regenerates a fresh
+  sitemap (including products) and stores it under Realtime Database node: sitemap/latestXml.
+  To expose the dynamic sitemap to crawlers at /sitemap.xml you can:
+   1. During deployment, fetch the value from the database and overwrite this file, OR
+   2. Add a lightweight backend / Cloud Function to serve the latest XML from the database path.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://babysouk.in/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+</urlset>
