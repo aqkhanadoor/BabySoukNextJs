@@ -14,11 +14,11 @@ const Cart = () => {
   const shipping = subtotal > 999 ? 0 : 99;
   const total = subtotal + shipping;
 
-  const handleQuantityChange = (productId: string, newQuantity: number) => {
+  const handleQuantityChange = (itemId: string, newQuantity: number) => {
     if (newQuantity < 1) {
-      removeFromCart(productId);
+      removeFromCart(itemId);
     } else {
-      updateQuantity(productId, newQuantity);
+      updateQuantity(itemId, newQuantity);
     }
   };
 
@@ -30,8 +30,10 @@ const Cart = () => {
     let message = "Hello! I would like to place an order:\n\n";
 
     state.items.forEach((item, index) => {
-      const productUrl = `${baseUrl}/product/${item.product.id}`;
+      const productUrl = `${baseUrl}/product/${item.product.slug || item.product.id}`;
       message += `${index + 1}. ${item.product.name}\n`;
+      if (item.color) message += `   Color: ${item.color}\n`;
+      if (item.size) message += `   Size: ${item.size}\n`;
       message += `   Link: ${productUrl}\n`;
       message += `   Quantity: ${item.quantity}\n`;
       message += `   Price: ₹${item.product.specialPrice} each\n`;
@@ -88,10 +90,10 @@ const Cart = () => {
             {/* Cart Items */}
             <div className="lg:col-span-2 space-y-6">
               {state.items.map((item) => (
-                <Card key={item.product.id} className="p-4">
+                <Card key={item.id} className="p-4">
                   <div className="flex items-center gap-4">
                     {/* Product Image */}
-                    <Link to={`/product/${item.product.id}`}>
+                    <Link to={`/product/${item.product.slug || item.product.id}`}>
                       <img
                         src={item.product.image}
                         alt={item.product.name}
@@ -101,11 +103,18 @@ const Cart = () => {
 
                     {/* Product Details */}
                     <div className="flex-1">
-                      <Link to={`/product/${item.product.id}`}>
+                      <Link to={`/product/${item.product.slug || item.product.id}`}>
                         <h3 className="font-semibold text-lg text-playful-foreground mb-1 hover:text-playful-primary transition-colors cursor-pointer">
                           {item.product.name}
                         </h3>
                       </Link>
+                      {(item.color || item.size) && (
+                        <div className="text-sm text-playful-foreground/80 mb-2">
+                          {item.color && <span>Color: {item.color}</span>}
+                          {item.color && item.size && <span> &bull; </span>}
+                          {item.size && <span>Size: {item.size}</span>}
+                        </div>
+                      )}
                       <p className="text-xl font-bold text-playful-primary">
                         ₹{item.product.specialPrice}
                       </p>
@@ -117,7 +126,7 @@ const Cart = () => {
                         variant="outline"
                         size="icon"
                         className="h-8 w-8"
-                        onClick={() => handleQuantityChange(item.product.id, item.quantity - 1)}
+                        onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
                       >
                         <Minus className="h-4 w-4" />
                       </Button>
@@ -128,7 +137,7 @@ const Cart = () => {
                         variant="outline"
                         size="icon"
                         className="h-8 w-8"
-                        onClick={() => handleQuantityChange(item.product.id, item.quantity + 1)}
+                        onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
                       >
                         <Plus className="h-4 w-4" />
                       </Button>
@@ -143,7 +152,7 @@ const Cart = () => {
                         variant="destructive"
                         size="sm"
                         className="text-xs"
-                        onClick={() => removeFromCart(item.product.id)}
+                        onClick={() => removeFromCart(item.id)}
                       >
                         <Trash2 className="h-3 w-3 mr-1" />
                         Remove

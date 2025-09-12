@@ -13,6 +13,7 @@ import babyWalkerImg from "@/assets/products/baby-walker.jpg";
 
 export interface Product {
   id: string;
+  slug?: string;
   name: string;
   mrp: number;
   specialPrice: number;
@@ -22,11 +23,14 @@ export interface Product {
   subcategory: string;
   inStock: boolean;
   dateAdded: string;
+  colors?: string[];
+  sizes?: string[];
 }
 
 export const products: Product[] = [
   {
     id: "1",
+    slug: "soft-plush-teddy-bear",
     name: "Soft Plush Teddy Bear",
     mrp: 1299,
     specialPrice: 899,
@@ -38,7 +42,8 @@ export const products: Product[] = [
     dateAdded: "2024-01-15"
   },
   {
-    id: "2", 
+    id: "2",
+    slug: "organic-cotton-baby-onesie",
     name: "Organic Cotton Baby Onesie",
     mrp: 799,
     specialPrice: 599,
@@ -47,10 +52,13 @@ export const products: Product[] = [
     category: "Clothing",
     subcategory: "Bodysuits",
     inStock: true,
-    dateAdded: "2024-01-20"
+    dateAdded: "2024-01-20",
+    colors: ["White", "Light Blue", "Pink", "Mint Green"],
+    sizes: ["Newborn", "0-3M", "3-6M", "6-12M"],
   },
   {
     id: "3",
+    slug: "baby-care-gift-set",
     name: "Baby Care Gift Set",
     mrp: 1599,
     specialPrice: 1199,
@@ -63,6 +71,7 @@ export const products: Product[] = [
   },
   {
     id: "4",
+    slug: "educational-building-blocks",
     name: "Educational Building Blocks",
     mrp: 999,
     specialPrice: 749,
@@ -75,6 +84,7 @@ export const products: Product[] = [
   },
   {
     id: "5",
+    slug: "baby-winter-jacket",
     name: "Baby Winter Jacket",
     mrp: 1899,
     specialPrice: 1399,
@@ -87,6 +97,7 @@ export const products: Product[] = [
   },
   {
     id: "6",
+    slug: "natural-baby-soap",
     name: "Natural Baby Soap",
     mrp: 299,
     specialPrice: 249,
@@ -99,6 +110,7 @@ export const products: Product[] = [
   },
   {
     id: "7",
+    slug: "baby-feeding-bottle-set",
     name: "Baby Feeding Bottle Set",
     mrp: 899,
     specialPrice: 699,
@@ -111,6 +123,7 @@ export const products: Product[] = [
   },
   {
     id: "8",
+    slug: "musical-activity-toy",
     name: "Musical Activity Toy",
     mrp: 1499,
     specialPrice: 1199,
@@ -123,6 +136,7 @@ export const products: Product[] = [
   },
   {
     id: "9",
+    slug: "baby-sleep-suit",
     name: "Baby Sleep Suit",
     mrp: 699,
     specialPrice: 499,
@@ -135,6 +149,7 @@ export const products: Product[] = [
   },
   {
     id: "10",
+    slug: "baby-massage-oil",
     name: "Baby Massage Oil",
     mrp: 399,
     specialPrice: 299,
@@ -147,6 +162,7 @@ export const products: Product[] = [
   },
   {
     id: "11",
+    slug: "high-chair-for-feeding",
     name: "High Chair for Feeding",
     mrp: 3999,
     specialPrice: 2999,
@@ -159,6 +175,7 @@ export const products: Product[] = [
   },
   {
     id: "12",
+    slug: "baby-walker-with-toys",
     name: "Baby Walker with Toys",
     mrp: 2499,
     specialPrice: 1899,

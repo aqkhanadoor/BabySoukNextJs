@@ -12,16 +12,30 @@ import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import { db } from "@/lib/firebase";
 import { onValue, ref as dbRef } from "firebase/database";
+import { memoryCache } from "@/lib/cache";
+import { useWishlist } from "@/hooks/use-wishlist";
 
 const ProductDetail = () => {
-  const { category, slug } = useParams<{ category: string; slug: string }>();
+  const { slug } = useParams<{ slug: string }>();
   const { addToCart } = useCart();
   const { toast } = useToast();
   const [remoteProduct, setRemoteProduct] = useState<Product | null>(null);
   const [loaded, setLoaded] = useState(false);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const { isInWishlist, toggleWishlist } = useWishlist(slug || '');
 
   useEffect(() => {
     if (!slug) return;
+
+    const cacheKey = `product-${slug}`;
+    const cached = memoryCache.get(cacheKey);
+    if (cached) {
+      setRemoteProduct(cached);
+      setLoaded(true);
+      return;
+    }
+
     const ref = dbRef(db, "products");
     const unsub = onValue(ref, (snap) => {
       const val = snap.val() as Record<string, any> | null;
@@ -51,6 +65,7 @@ const ProductDetail = () => {
       const dateStr = createdAtNum ? new Date(createdAtNum).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10);
       const mapped: Product = {
         id: foundKey,
+        slug: p.slug,
         name: p.name,
         mrp,
         specialPrice,
@@ -60,9 +75,12 @@ const ProductDetail = () => {
         subcategory: p.subcategory || "",
         inStock: typeof p.stock === "number" ? p.stock > 0 : true,
         dateAdded: dateStr,
+        colors: p.colors,
+        sizes: p.sizes,
       };
       setRemoteProduct(mapped);
       setLoaded(true);
+      memoryCache.set(cacheKey, mapped);
     });
     return () => unsub();
   }, [slug]);
@@ -82,12 +100,68 @@ const ProductDetail = () => {
     return bySlug || null;
   }, [remoteProduct, slug]);
 
+  useEffect(() => {
+    if (product) {
+      setSelectedColor(null);
+      setSelectedSize(null);
+    }
+  }, [product]);
+
   const handleAddToCart = () => {
     if (product) {
-      addToCart(product);
+      if (product.colors && product.colors.length > 0 && !selectedColor) {
+        toast({
+          title: "Please select a color",
+          description: "You need to choose a color before adding to the cart.",
+          variant: "destructive",
+        });
+        return;
+      }
+      if (product.sizes && product.sizes.length > 0 && !selectedSize) {
+        toast({
+          title: "Please select a size",
+          description: "You need to choose a size before adding to the cart.",
+          variant: "destructive",
+        });
+        return;
+      }
+      addToCart(product, 1, selectedColor, selectedSize);
       toast({
         title: "Added to your treasure chest!",
         description: `${product.name} is now in your cart.`,
+      });
+    }
+  };
+
+  const handleShare = async () => {
+    if (!product) return;
+    const shareText = `Check out this amazing product: ${product.name} for just ₹${product.specialPrice}!`;
+    const shareData = {
+      title: product.name,
+      text: shareText,
+      url: window.location.href,
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        toast({
+          title: "Shared successfully!",
+          description: "Thanks for sharing the love.",
+        });
+      } else {
+        // Fallback for browsers that don't support Web Share API
+        await navigator.clipboard.writeText(`${shareText}\n${window.location.href}`);
+        toast({
+          title: "Link Copied!",
+          description: "Product link has been copied to your clipboard.",
+        });
+      }
+    } catch (error) {
+      console.error("Error sharing:", error);
+      toast({
+        title: "Sharing failed",
+        description: "Could not share the product at this time.",
+        variant: "destructive",
       });
     }
   };
@@ -203,6 +277,44 @@ const ProductDetail = () => {
                   )}
                 </div>
 
+                {/* Colors */}
+                {product.colors && product.colors.length > 0 && (
+                  <div className="mb-6">
+                    <h3 className="text-lg font-bold text-playful-foreground mb-3">Available Colors</h3>
+                    <div className="flex flex-wrap gap-3">
+                      {product.colors.map((color) => (
+                        <Button
+                          key={color}
+                          variant={selectedColor === color ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setSelectedColor(color)}
+                        >
+                          {color}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Sizes */}
+                {product.sizes && product.sizes.length > 0 && (
+                  <div className="mb-6">
+                    <h3 className="text-lg font-bold text-playful-foreground mb-3">Available Sizes</h3>
+                    <div className="flex flex-wrap gap-3">
+                      {product.sizes.map((size) => (
+                        <Button
+                          key={size}
+                          variant={selectedSize === size ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setSelectedSize(size)}
+                        >
+                          {size}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {/* Action Buttons */}
                 <div className="flex gap-4 mb-8">
                   <Button
@@ -215,10 +327,10 @@ const ProductDetail = () => {
                     <ShoppingCart className="h-5 w-5 mr-2" />
                     Add to Cart
                   </Button>
-                  <Button variant="outline" size="lg" className="hover:animate-shake">
-                    <Heart className="h-5 w-5" />
+                  <Button variant="outline" size="lg" className="hover:animate-shake" onClick={toggleWishlist}>
+                    <Heart className={`h-5 w-5 ${isInWishlist ? 'fill-red-500 text-red-500' : ''}`} />
                   </Button>
-                  <Button variant="outline" size="lg" className="hover:animate-shake">
+                  <Button variant="outline" size="lg" className="hover:animate-shake" onClick={handleShare}>
                     <Share2 className="h-5 w-5" />
                   </Button>
                 </div>
@@ -269,10 +381,6 @@ const ProductDetail = () => {
                 <div className="flex justify-between py-2 border-b-2 border-dashed border-playful-foreground/20">
                   <span className="font-semibold">Subcategory</span>
                   <span className="text-playful-foreground/80">{product.subcategory}</span>
-                </div>
-                <div className="flex justify-between py-2 border-b-2 border-dashed border-playful-foreground/20">
-                  <span className="font-semibold">Product ID</span>
-                  <span className="text-playful-foreground/80">BS-{product.id.padStart(4, '0')}</span>
                 </div>
                 <div className="flex justify-between py-2 border-b-2 border-dashed border-playful-foreground/20">
                   <span className="font-semibold">Availability</span>

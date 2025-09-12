@@ -69,7 +69,7 @@ All colors MUST be HSL.
     --shadow-button: 0 4px 15px -3px hsl(var(--playful-primary) / 0.4);
     --cartoon-shadow: 5px 5px 0px hsl(var(--playful-foreground));
 
-    --radius: 1rem;
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
