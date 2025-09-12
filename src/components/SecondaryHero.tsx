@@ -82,7 +82,7 @@ const SecondaryHero = () => {
         const content = (
             <div className="grid place-items-center p-2">
                 <div className="relative w-full max-w-7xl rounded-3xl overflow-hidden shadow-2d border-4 border-playful-foreground transition-all duration-300 group-hover:shadow-none group-hover:-translate-y-1">
-                    <img src={src} className="w-full h-[340px] md:h-[500px] object-cover transition-transform duration-300 group-hover:scale-105" />
+                    <img src={src} className="w-full h-[340px] md:h-[500px] object-fill transition-transform duration-300 group-hover:scale-105" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                 </div>
             </div>

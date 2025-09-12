@@ -48,7 +48,7 @@ const App = () => (
               <Route path="/cart" element={<Cart />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/admin000/login" element={<LoginPage />} />
-              <Route path="/wp-login" element={<FakeLoginPage />} />
+              <Route path="/wp-admin" element={<FakeLoginPage />} />
 
               <Route path="/admin000" element={<ProtectedRoute />}>
                 <Route element={<AdminLayout />}>

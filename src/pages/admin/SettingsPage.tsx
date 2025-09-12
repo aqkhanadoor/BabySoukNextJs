@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2 } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { db, storage } from "@/lib/firebase";
 import { ref as dbRef, onValue, set, serverTimestamp } from "firebase/database";
@@ -58,6 +58,50 @@ const HeroManagementPage = ({ heroKey, title, description }: { heroKey: 'hero2' 
         } else {
             setMobileFiles(prev => { const next = [...prev]; next[idx] = file; return next; });
             setMobileImages(prev => { const next = [...prev]; next[idx] = url; return next; });
+        }
+    };
+
+    const handleDeleteImage = async (kind: "desktop" | "mobile", idx: number) => {
+        const imageUrlToDelete = kind === 'desktop' ? originalDesktop[idx] : originalMobile[idx];
+        const isNewFile = kind === 'desktop' ? !!desktopFiles[idx] : !!mobileFiles[idx];
+
+        if (!imageUrlToDelete && !isNewFile) {
+            toast({ title: "Nothing to delete", variant: "destructive" });
+            return;
+        }
+
+        // If it's a new file not yet uploaded, just clear it from state
+        if (isNewFile && !imageUrlToDelete.startsWith('https')) {
+            if (kind === "desktop") {
+                setDesktopFiles(prev => { const next = [...prev]; next[idx] = null; return next; });
+                setDesktopImages(prev => { const next = [...prev]; next[idx] = ""; return next; });
+            } else {
+                setMobileFiles(prev => { const next = [...prev]; next[idx] = null; return next; });
+                setMobileImages(prev => { const next = [...prev]; next[idx] = ""; return next; });
+            }
+            toast({ title: "Image removed" });
+            return;
+        }
+
+        setSaving(true);
+        try {
+            // Delete from storage
+            if (imageUrlToDelete) {
+                await deleteObject(storageRef(storage, imageUrlToDelete));
+            }
+
+            // Update database
+            const updatedImages = kind === 'desktop' ? [...desktopImages] : [...mobileImages];
+            updatedImages[idx] = "";
+
+            const fieldToUpdate = kind === 'desktop' ? 'desktop' : 'mobile';
+            await set(dbRef(db, `homepage/${heroKey}/${fieldToUpdate}`), updatedImages);
+
+            toast({ title: "Image deleted successfully" });
+        } catch (error: any) {
+            toast({ title: "Deletion failed", description: error.message, variant: "destructive" });
+        } finally {
+            setSaving(false);
         }
     };
 
@@ -122,8 +166,21 @@ const HeroManagementPage = ({ heroKey, title, description }: { heroKey: 'hero2' 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {[0, 1, 2].map(i => (
                             <div key={`desktop-${i}`} className="space-y-2">
-                                <div className="aspect-[3/2] w-full overflow-hidden rounded-md border bg-muted">
-                                    {desktopImages[i] && <img src={desktopImages[i]} className="h-full w-full object-cover" />}
+                                <div className="relative aspect-[3/2] w-full overflow-hidden rounded-md border bg-muted">
+                                    {desktopImages[i] && (
+                                        <>
+                                            <img src={desktopImages[i]} className="h-full w-full object-cover" />
+                                            <Button
+                                                variant="destructive"
+                                                size="icon"
+                                                className="absolute top-1 right-1 h-6 w-6"
+                                                onClick={() => handleDeleteImage("desktop", i)}
+                                                disabled={saving}
+                                            >
+                                                <X className="h-4 w-4" />
+                                            </Button>
+                                        </>
+                                    )}
                                 </div>
                                 <Input type="file" accept="image/*" onChange={e => handleFilePick("desktop", i, e.target.files)} />
                                 <Input placeholder="Link URL (optional)" value={links[i]} onChange={e => setLinks(prev => { const next = [...prev]; next[i] = e.target.value; return next; })} />
@@ -136,8 +193,21 @@ const HeroManagementPage = ({ heroKey, title, description }: { heroKey: 'hero2' 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {[0, 1, 2].map(i => (
                             <div key={`mobile-${i}`} className="space-y-2">
-                                <div className="aspect-square w-full overflow-hidden rounded-md border bg-muted">
-                                    {mobileImages[i] && <img src={mobileImages[i]} className="h-full w-full object-cover" />}
+                                <div className="relative aspect-square w-full overflow-hidden rounded-md border bg-muted">
+                                    {mobileImages[i] && (
+                                        <>
+                                            <img src={mobileImages[i]} className="h-full w-full object-cover" />
+                                            <Button
+                                                variant="destructive"
+                                                size="icon"
+                                                className="absolute top-1 right-1 h-6 w-6"
+                                                onClick={() => handleDeleteImage("mobile", i)}
+                                                disabled={saving}
+                                            >
+                                                <X className="h-4 w-4" />
+                                            </Button>
+                                        </>
+                                    )}
                                 </div>
                                 <Input type="file" accept="image/*" onChange={e => handleFilePick("mobile", i, e.target.files)} />
                             </div>

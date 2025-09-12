@@ -107,8 +107,15 @@ const ProductsPage = () => {
 
     const handleSave = () => {
         setIsFormOpen(false);
-        setEditingProduct(null);
+        // editingProduct is cleared in onOpenChange
         regenerateSitemap().catch((e) => console.warn("Sitemap regeneration failed", e));
+    };
+
+    const handleOpenChange = (isOpen: boolean) => {
+        setIsFormOpen(isOpen);
+        if (!isOpen) {
+            setEditingProduct(null);
+        }
     };
 
     const deleteProduct = async (item: { key: string; data: ProductRecord }) => {
@@ -274,7 +281,7 @@ const ProductsPage = () => {
             )}
 
             <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-                <DialogContent className="max-w-4xl">
+                <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>{editingProduct ? "Edit Product" : "Add New Product"}</DialogTitle>
                     </DialogHeader>

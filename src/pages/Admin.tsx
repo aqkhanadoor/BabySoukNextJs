@@ -692,13 +692,13 @@ const Admin = () => {
       category: p.category || "",
       subcategory: p.subcategory || "",
       description: p.description || "",
-      colors: p.colors?.length ? [...p.colors] : [""],
-      sizes: p.sizes?.length ? [...p.sizes] : [""],
+      colors: Array.isArray(p.colors) && p.colors.length ? [...p.colors] : [""],
+      sizes: Array.isArray(p.sizes) && p.sizes.length ? [...p.sizes] : [""],
       imagesFiles: [],
       imagesUrls: Array.isArray(p.images) ? [...p.images] : [],
       slug: p.slug || "",
       shortDescription: p.shortDescription || "",
-      tags: p.tags?.length ? [...p.tags] : [""],
+      tags: Array.isArray(p.tags) && p.tags.length ? [...p.tags] : [""],
       brand: p.brand || "",
       sku: p.sku || "",
       stock: p.stock != null ? String(p.stock) : "",
@@ -710,9 +710,7 @@ const Admin = () => {
     });
     setSlugEdited(!!p.slug);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  // Delete a product and its images from Storage
+  };  // Delete a product and its images from Storage
   const deleteProduct = async (item: { key: string; data: ProductRecord }) => {
     const ok = window.confirm(`Delete product "${item.data.name}"? This will also delete its images from storage.`);
     if (!ok) return;
