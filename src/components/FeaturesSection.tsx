@@ -3,52 +3,52 @@ import { Shield, Truck, RotateCcw, Heart, Award, Clock } from "lucide-react";
 const features = [
   {
     icon: Shield,
-    title: "Safe & Certified",
-    description: "All products are safety tested and certified for your peace of mind",
-    color: "baby-pink"
+    title: "Super Safe",
+    description: "All our products are tested to be super safe for your baby.",
+    color: "bg-playful-primary"
   },
   {
     icon: Truck,
-    title: "Free Delivery",
-    description: "Free home delivery on orders above ₹999 across Kerala",
-    color: "baby-blue"
+    title: "Speedy Delivery",
+    description: "We'll get your goodies to you in a flash!",
+    color: "bg-playful-secondary"
   },
   {
     icon: RotateCcw,
-    title: "Easy Returns",
-    description: "Hassle-free returns within 7 days if you're not satisfied",
-    color: "baby-green"
+    title: "Easy Peasy Returns",
+    description: "Not quite right? No worries! Returns are simple.",
+    color: "bg-playful-accent"
   },
   {
     icon: Heart,
     title: "Made with Love",
-    description: "Every product is chosen with care and love for your little one",
-    color: "baby-purple"
+    description: "Every item is chosen with a whole lot of love.",
+    color: "bg-playful-primary"
   },
   {
     icon: Award,
-    title: "Quality Assured",
-    description: "Premium quality products from trusted brands worldwide",
-    color: "baby-orange"
+    title: "Top-Notch Quality",
+    description: "Only the best and most trusted brands make the cut.",
+    color: "bg-playful-secondary"
   },
   {
     icon: Clock,
     title: "Quick Service",
-    description: "Fast processing and same-day delivery available in Mukkam",
-    color: "baby-yellow"
+    description: "Need help? We're here for you, quick as a bunny!",
+    color: "bg-playful-accent"
   }
 ];
 
 const FeaturesSection = () => {
   return (
-    <section className="py-16 bg-gradient-card">
+    <section className="py-16 bg-playful-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Why Choose Baby Souk?
+          <h2 className="text-4xl md:text-5xl font-bold text-playful-foreground mb-4 animate-bounce-gentle">
+            Why We're Awesome!
           </h2>
-          <p className="text-muted-foreground text-lg">
-            We're committed to providing the best for your little ones
+          <p className="text-playful-foreground/80 text-lg">
+            Here’s why shopping with us is always a fun adventure!
           </p>
         </div>
 
@@ -56,15 +56,15 @@ const FeaturesSection = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="group text-center p-6 rounded-2xl bg-card hover:bg-gradient-hero hover:text-primary-foreground transition-all duration-300 shadow-card hover:shadow-playful transform hover:-translate-y-1"
+              className="group text-center p-6 rounded-3xl bg-white border-4 border-playful-foreground shadow-2d hover:-translate-y-2 transition-transform duration-300"
             >
-              <div className={`inline-flex items-center justify-center w-16 h-16 bg-${feature.color} rounded-full mb-4 group-hover:bg-white/20 transition-colors duration-300`}>
-                <feature.icon className="h-8 w-8 text-white" />
+              <div className={`inline-flex items-center justify-center w-20 h-20 ${feature.color} rounded-full mb-4 border-4 border-playful-foreground group-hover:animate-wiggle`}>
+                <feature.icon className="h-10 w-10 text-white" />
               </div>
-              <h3 className="text-xl font-bold mb-3 group-hover:text-primary-foreground transition-colors">
+              <h3 className="text-2xl font-bold mb-3 text-playful-foreground">
                 {feature.title}
               </h3>
-              <p className="text-muted-foreground group-hover:text-primary-foreground/90 transition-colors">
+              <p className="text-playful-foreground/70">
                 {feature.description}
               </p>
             </div>

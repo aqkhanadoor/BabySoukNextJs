@@ -70,21 +70,20 @@ const ProductsSection = () => {
   }, [remoteProducts]);
 
   return (
-    <section className="py-16 px-4 bg-gradient-to-br from-background to-baby-pink/5">
+    <section className="py-16 px-4 bg-playful-background">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-foreground mb-4">
-            Featured Products
+          <h2 className="text-4xl md:text-5xl font-bold text-playful-foreground mb-4 animate-wiggle">
+            Our Favorite Finds
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover our carefully curated collection of baby products,
-            designed with love and safety in mind.
+          <p className="text-lg text-playful-foreground/80 max-w-2xl mx-auto">
+            Check out these super fun and safe products, picked just for you!
           </p>
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {displayProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
@@ -93,8 +92,8 @@ const ProductsSection = () => {
         {/* View All Button */}
         <div className="text-center">
           <Link to="/products">
-            <Button variant="hero" size="lg" className="group">
-              View All Products
+            <Button size="lg" className="group text-lg shadow-2d hover:shadow-none transition-all transform hover:-translate-y-1">
+              See More Stuff
               <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>

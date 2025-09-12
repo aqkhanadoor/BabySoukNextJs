@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { HelpCircle } from "lucide-react";
 
 const Faq = () => {
     const faqs = [
@@ -33,31 +34,34 @@ const Faq = () => {
     }, {});
 
     return (
-        <div className="min-h-screen flex flex-col bg-background">
+        <div className="min-h-screen flex flex-col bg-playful-background font-sans">
             <Header />
             <main className="flex-1">
                 <section className="container mx-auto px-4 py-12 md:py-20 max-w-5xl">
-                    <div className="mb-10 text-center">
-                        <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">Frequently Asked Questions</h1>
-                        <p className="text-muted-foreground max-w-2xl mx-auto">Answers to common questions about ordering, shipping, products, payments, and more.</p>
+                    <div className="mb-12 text-center">
+                        <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-4 text-playful-foreground animate-jump">Questions & Answers</h1>
+                        <p className="text-playful-foreground/80 max-w-2xl mx-auto text-lg">Got questions? We've got answers! Here are some things people often ask.</p>
                     </div>
                     <div className="space-y-14">
                         {Object.entries(grouped).map(([cat, items]) => (
                             <div key={cat}>
-                                <h2 className="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2"><span className="h-6 w-1.5 rounded bg-primary" />{cat}</h2>
-                                <Accordion type="single" collapsible className="border rounded-lg divide-y bg-card/40 backdrop-blur-sm">
+                                <h2 className="text-2xl md:text-3xl font-bold mb-6 flex items-center gap-3 text-playful-primary">
+                                    <HelpCircle className="h-8 w-8" />
+                                    {cat}
+                                </h2>
+                                <Accordion type="single" collapsible className="space-y-4">
                                     {items.map((f, idx) => (
-                                        <AccordionItem key={f.q} value={`${cat}-${idx}`}>
-                                            <AccordionTrigger className="px-4 text-left">{f.q}</AccordionTrigger>
-                                            <AccordionContent className="px-4 leading-relaxed text-muted-foreground">{f.a}</AccordionContent>
+                                        <AccordionItem key={f.q} value={`${cat}-${idx}`} className="bg-white rounded-2xl border-2 border-playful-foreground shadow-2d overflow-hidden">
+                                            <AccordionTrigger className="px-6 text-left font-semibold text-lg hover:no-underline">{f.q}</AccordionTrigger>
+                                            <AccordionContent className="px-6 leading-relaxed text-playful-foreground/80 text-base">{f.a}</AccordionContent>
                                         </AccordionItem>
                                     ))}
                                 </Accordion>
                             </div>
                         ))}
                     </div>
-                    <div className="mt-16 text-center text-sm text-muted-foreground">
-                        Still have a question? <a href="/contact" className="text-primary underline underline-offset-4 hover:no-underline">Contact us</a> and we’ll help you out.
+                    <div className="mt-16 text-center text-base text-playful-foreground/80 p-6 bg-white rounded-2xl border-2 border-playful-foreground shadow-2d">
+                        Still have a question? <a href="/contact" className="text-playful-primary font-bold underline underline-offset-4 hover:no-underline">Contact us</a> and we’ll help you out!
                     </div>
                 </section>
             </main>

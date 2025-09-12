@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,33 +10,45 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 355 100% 98%;
-    --foreground: 220 85% 15%;
+    --background: 45 100% 95%;
+    /* Light yellow */
+    --foreground: 25 80% 30%;
+    /* Brown */
 
     --card: 0 0% 100%;
-    --card-foreground: 220 85% 15%;
+    --card-foreground: 25 80% 30%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 85% 15%;
+    --popover-foreground: 25 80% 30%;
 
-    --primary: 330 81% 60%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 340 100% 65%;
+    /* Bright pink */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 50 100% 80%;
-    --secondary-foreground: 220 85% 15%;
+    --secondary: 190 100% 70%;
+    /* Bright cyan */
+    --secondary-foreground: 25 80% 30%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 45 100% 90%;
+    --muted-foreground: 25 80% 40%;
 
-    --accent: 200 100% 70%;
-    --accent-foreground: 220 85% 15%;
+    --accent: 140 80% 60%;
+    /* Playful green */
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 330 81% 60%;
+    --border: 340 100% 80%;
+    --input: 340 100% 85%;
+    --ring: 340 100% 65%;
+
+    /* Playful Custom Colors */
+    --playful-primary: 340 100% 65%;
+    --playful-secondary: 190 100% 70%;
+    --playful-accent: 140 80% 60%;
+    --playful-background: 45 100% 95%;
+    --playful-foreground: 25 80% 30%;
 
     /* Baby Souk Custom Colors */
     --baby-pink: 330 81% 60%;
@@ -45,16 +59,17 @@ All colors MUST be HSL.
     --baby-orange: 30 100% 75%;
 
     /* Gradients */
-    --gradient-rainbow: linear-gradient(135deg, hsl(var(--baby-pink)), hsl(var(--baby-blue)), hsl(var(--baby-yellow)));
-    --gradient-hero: linear-gradient(135deg, hsl(var(--baby-pink)) 0%, hsl(var(--baby-blue)) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(355 100% 99%) 100%);
+    --gradient-rainbow: linear-gradient(135deg, hsl(var(--playful-primary)), hsl(var(--playful-secondary)), hsl(var(--playful-accent)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--playful-primary)) 0%, hsl(var(--playful-secondary)) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(45 100% 98%) 100%);
 
     /* Shadows */
-    --shadow-playful: 0 10px 30px -10px hsl(var(--baby-pink) / 0.3);
-    --shadow-card: 0 4px 20px -5px hsl(var(--baby-pink) / 0.2);
-    --shadow-button: 0 4px 15px -3px hsl(var(--baby-pink) / 0.4);
+    --shadow-playful: 0 10px 30px -10px hsl(var(--playful-primary) / 0.3);
+    --shadow-card: 0 4px 20px -5px hsl(var(--playful-primary) / 0.2);
+    --shadow-button: 0 4px 15px -3px hsl(var(--playful-primary) / 0.4);
+    --cartoon-shadow: 5px 5px 0px hsl(var(--playful-foreground));
 
-    --radius: 0.5rem;
+    --radius: 1rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -74,33 +89,48 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 220 85% 8%;
-    --foreground: 355 100% 98%;
+    --background: 230 40% 15%;
+    /* Dark blue */
+    --foreground: 45 100% 95%;
+    /* Light yellow */
 
-    --card: 220 85% 10%;
-    --card-foreground: 355 100% 98%;
+    --card: 230 40% 20%;
+    --card-foreground: 45 100% 95%;
 
-    --popover: 220 85% 10%;
-    --popover-foreground: 355 100% 98%;
+    --popover: 230 40% 10%;
+    --popover-foreground: 45 100% 95%;
 
-    --primary: 330 81% 60%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 340 100% 75%;
+    /* Lighter pink */
+    --primary-foreground: 230 40% 10%;
 
-    --secondary: 220 85% 15%;
-    --secondary-foreground: 355 100% 98%;
+    --secondary: 190 100% 80%;
+    /* Lighter cyan */
+    --secondary-foreground: 230 40% 10%;
 
-    --muted: 220 85% 15%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 230 40% 25%;
+    --muted-foreground: 45 100% 85%;
 
-    --accent: 200 100% 70%;
-    --accent-foreground: 220 85% 8%;
+    --accent: 140 80% 70%;
+    /* Lighter green */
+    --accent-foreground: 230 40% 10%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 220 85% 15%;
-    --input: 220 85% 15%;
-    --ring: 330 81% 60%;
+    --border: 340 100% 50%;
+    --input: 340 100% 45%;
+    --ring: 340 100% 75%;
+
+    /* Playful Custom Colors */
+    --playful-primary: 340 100% 75%;
+    --playful-secondary: 190 100% 80%;
+    --playful-accent: 140 80% 70%;
+    --playful-background: 230 40% 15%;
+    --playful-foreground: 45 100% 95%;
+
+    --cartoon-shadow: 5px 5px 0px hsl(var(--playful-foreground));
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -118,6 +148,6 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-playful-background text-playful-foreground font-sans;
   }
 }

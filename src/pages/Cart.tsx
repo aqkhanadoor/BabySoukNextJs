@@ -25,10 +25,10 @@ const Cart = () => {
   const handleWhatsAppCheckout = () => {
     const phoneNumber = "919526542902";
     const baseUrl = window.location.origin;
-    
+
     // Create message with cart items
     let message = "Hello! I would like to place an order:\n\n";
-    
+
     state.items.forEach((item, index) => {
       const productUrl = `${baseUrl}/product/${item.product.id}`;
       message += `${index + 1}. ${item.product.name}\n`;
@@ -37,35 +37,35 @@ const Cart = () => {
       message += `   Price: ₹${item.product.specialPrice} each\n`;
       message += `   Total: ₹${item.product.specialPrice * item.quantity}\n\n`;
     });
-    
+
     message += `Subtotal: ₹${subtotal}\n`;
     message += `Shipping: ${shipping === 0 ? "Free" : `₹${shipping}`}\n`;
     message += `Total Amount: ₹${total}\n\n`;
     message += "Please confirm my order. Thank you!";
-    
+
     // Encode message for URL
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-    
+
     // Open WhatsApp
     window.open(whatsappUrl, "_blank");
   };
 
   if (state.items.length === 0) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-playful-background font-sans">
         <Header />
-        
+
         <main className="py-16 px-4">
           <div className="max-w-2xl mx-auto text-center">
-            <ShoppingBag className="h-24 w-24 text-muted-foreground mx-auto mb-6" />
-            <h1 className="text-3xl font-bold text-foreground mb-4">Your Cart is Empty</h1>
-            <p className="text-lg text-muted-foreground mb-8">
-              Looks like you haven't added any items to your cart yet.
+            <div className="text-8xl mb-6 animate-bounce">🛒</div>
+            <h1 className="text-4xl font-bold text-playful-foreground mb-4">Your Cart is Empty!</h1>
+            <p className="text-lg text-playful-foreground/80 mb-8">
+              Looks like you haven't found any treasures yet. Let's go find some!
             </p>
             <Link to="/products">
-              <Button variant="hero" size="lg">
-                Continue Shopping
+              <Button variant="default" size="lg" className="animate-shake">
+                Start Shopping
               </Button>
             </Link>
           </div>
@@ -77,76 +77,75 @@ const Cart = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-playful-background font-sans">
       <Header />
-      
+
       <main className="py-8 px-4">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl font-bold text-foreground mb-8">Shopping Cart</h1>
-          
+          <h1 className="text-5xl font-bold text-playful-foreground mb-8 text-center animate-jump">My Treasure Chest</h1>
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Cart Items */}
-            <div className="lg:col-span-2 space-y-4">
+            <div className="lg:col-span-2 space-y-6">
               {state.items.map((item) => (
-                <Card key={item.product.id} className="p-6">
+                <Card key={item.product.id} className="p-4">
                   <div className="flex items-center gap-4">
                     {/* Product Image */}
                     <Link to={`/product/${item.product.id}`}>
-                      <img 
-                        src={item.product.image} 
+                      <img
+                        src={item.product.image}
                         alt={item.product.name}
-                        className="w-20 h-20 object-cover rounded-lg bg-gradient-subtle hover:scale-105 transition-transform cursor-pointer"
+                        className="w-24 h-24 object-contain rounded-lg bg-white border-2 border-playful-foreground/20 hover:scale-105 transition-transform cursor-pointer"
                       />
                     </Link>
-                    
+
                     {/* Product Details */}
                     <div className="flex-1">
                       <Link to={`/product/${item.product.id}`}>
-                        <h3 className="font-semibold text-lg text-foreground mb-2 hover:text-primary transition-colors cursor-pointer">
+                        <h3 className="font-semibold text-lg text-playful-foreground mb-1 hover:text-playful-primary transition-colors cursor-pointer">
                           {item.product.name}
                         </h3>
                       </Link>
-                      <p className="text-xl font-bold text-primary">
+                      <p className="text-xl font-bold text-playful-primary">
                         ₹{item.product.specialPrice}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {item.product.category} • {item.product.subcategory}
                       </p>
                     </div>
 
                     {/* Quantity Controls */}
-                    <div className="flex items-center gap-3">
-                      <Button 
-                        variant="outline" 
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
                         size="icon"
+                        className="h-8 w-8"
                         onClick={() => handleQuantityChange(item.product.id, item.quantity - 1)}
                       >
                         <Minus className="h-4 w-4" />
                       </Button>
-                      <span className="w-12 text-center font-semibold">
+                      <span className="w-12 text-center font-bold text-lg">
                         {item.quantity}
                       </span>
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         size="icon"
+                        className="h-8 w-8"
                         onClick={() => handleQuantityChange(item.product.id, item.quantity + 1)}
                       >
                         <Plus className="h-4 w-4" />
                       </Button>
                     </div>
 
-                    {/* Total Price */}
+                    {/* Total Price & Remove */}
                     <div className="text-right">
-                      <p className="text-xl font-bold text-primary">
+                      <p className="text-xl font-bold text-playful-primary mb-2">
                         ₹{item.product.specialPrice * item.quantity}
                       </p>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="text-destructive hover:text-destructive"
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="text-xs"
                         onClick={() => removeFromCart(item.product.id)}
                       >
-                        <Trash2 className="h-4 w-4 mr-1" />
+                        <Trash2 className="h-3 w-3 mr-1" />
                         Remove
                       </Button>
                     </div>
@@ -159,20 +158,20 @@ const Cart = () => {
             <div className="lg:col-span-1">
               <Card className="p-6 sticky top-4">
                 <CardHeader className="p-0 mb-6">
-                  <CardTitle className="text-2xl">Order Summary</CardTitle>
+                  <CardTitle className="text-3xl text-center">Order Summary</CardTitle>
                 </CardHeader>
-                
+
                 <CardContent className="p-0 space-y-4">
-                  <div className="flex justify-between">
+                  <div className="flex justify-between text-lg">
                     <span>Subtotal ({state.itemCount} items)</span>
                     <span className="font-semibold">₹{subtotal}</span>
                   </div>
-                  
-                  <div className="flex justify-between">
+
+                  <div className="flex justify-between text-lg">
                     <span>Shipping</span>
                     <span className="font-semibold">
                       {shipping === 0 ? (
-                        <span className="text-green-600">Free</span>
+                        <span className="text-green-600">Free!</span>
                       ) : (
                         `₹${shipping}`
                       )}
@@ -180,32 +179,32 @@ const Cart = () => {
                   </div>
 
                   {shipping > 0 && (
-                    <div className="text-sm text-muted-foreground">
-                      Add ₹{999 - subtotal} more for free shipping
+                    <div className="text-sm text-playful-foreground/80 text-center bg-playful-background p-2 rounded-lg border-2 border-dashed border-playful-foreground/30">
+                      Add ₹{999 - subtotal} more for free shipping!
                     </div>
                   )}
-                  
-                  <Separator />
-                  
-                  <div className="flex justify-between text-xl font-bold">
+
+                  <Separator className="my-4 border-2 border-dashed border-playful-foreground/20" />
+
+                  <div className="flex justify-between text-2xl font-bold">
                     <span>Total</span>
-                    <span className="text-primary">₹{total}</span>
+                    <span className="text-playful-primary">₹{total}</span>
                   </div>
-                  
-                  <Button 
-                    variant="hero" 
-                    size="lg" 
-                    className="w-full mt-6 flex items-center justify-center gap-3"
+
+                  <Button
+                    variant="default"
+                    size="lg"
+                    className="w-full mt-6 flex items-center justify-center gap-3 animate-wiggle"
                     onClick={handleWhatsAppCheckout}
                   >
-                    <img 
-                      src={whatsappIcon} 
-                      alt="WhatsApp" 
+                    <img
+                      src={whatsappIcon}
+                      alt="WhatsApp"
                       className="w-6 h-6"
                     />
-                    Checkout through WhatsApp
+                    Checkout on WhatsApp
                   </Button>
-                  
+
                   <Link to="/products">
                     <Button variant="outline" size="lg" className="w-full">
                       Continue Shopping

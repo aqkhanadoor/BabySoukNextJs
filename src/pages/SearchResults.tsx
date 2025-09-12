@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Search, Filter, X, SlidersHorizontal } from "lucide-react";
+import { Search, Filter, X, SlidersHorizontal, Frown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -25,7 +25,6 @@ const SearchResults = () => {
   const [sortBy, setSortBy] = useState("relevance");
   const [showFilters, setShowFilters] = useState(false);
 
-  // Initialize search term from URL parameters
   useEffect(() => {
     const queryFromUrl = searchParams.get("q");
     const categoryFromUrl = searchParams.get("category");
@@ -37,7 +36,6 @@ const SearchResults = () => {
     }
   }, [searchParams]);
 
-  // Update URL when search term changes
   const updateSearchParams = (newSearchTerm: string) => {
     const newParams = new URLSearchParams(searchParams);
     if (newSearchTerm) {
@@ -48,78 +46,52 @@ const SearchResults = () => {
     setSearchParams(newParams);
   };
 
-  // Get subcategories for selected category
   const availableSubcategories = useMemo(() => {
     if (selectedCategory === "all") return [];
     const category = categories.find(cat => cat.name === selectedCategory);
     return category?.subcategories || [];
   }, [selectedCategory]);
 
-  // Filter and sort products based on search
   const searchResults = useMemo(() => {
     let filtered = products.filter(product => {
-      // Search filter - check name, description, category, subcategory
       if (searchTerm) {
         const searchLower = searchTerm.toLowerCase();
-        const matchesSearch = 
+        const matchesSearch =
           product.name.toLowerCase().includes(searchLower) ||
           product.description.toLowerCase().includes(searchLower) ||
           product.category.toLowerCase().includes(searchLower) ||
           product.subcategory.toLowerCase().includes(searchLower);
-        
+
         if (!matchesSearch) return false;
       }
 
-      // Category filter
-      if (selectedCategory !== "all" && product.category !== selectedCategory) {
-        return false;
-      }
+      if (selectedCategory !== "all" && product.category !== selectedCategory) return false;
+      if (selectedSubcategory !== "all" && product.subcategory !== selectedSubcategory) return false;
 
-      // Subcategory filter
-      if (selectedSubcategory !== "all" && product.subcategory !== selectedSubcategory) {
-        return false;
-      }
-
-      // Price filter
       if (priceRange !== "all") {
         const price = product.specialPrice;
         switch (priceRange) {
-          case "0-500":
-            return price <= 500;
-          case "500-1000":
-            return price > 500 && price <= 1000;
-          case "1000-2000":
-            return price > 1000 && price <= 2000;
-          case "2000+":
-            return price > 2000;
-          default:
-            return true;
+          case "0-500": return price <= 500;
+          case "500-1000": return price > 500 && price <= 1000;
+          case "1000-2000": return price > 1000 && price <= 2000;
+          case "2000+": return price > 2000;
+          default: return true;
         }
       }
-
       return true;
     });
 
-    // Sort products
     switch (sortBy) {
-      case "price-low":
-        return filtered.sort((a, b) => a.specialPrice - b.specialPrice);
-      case "price-high":
-        return filtered.sort((a, b) => b.specialPrice - a.specialPrice);
-      case "newest":
-        return filtered.sort((a, b) => new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime());
-      case "relevance":
+      case "price-low": return filtered.sort((a, b) => a.specialPrice - b.specialPrice);
+      case "price-high": return filtered.sort((a, b) => b.specialPrice - a.specialPrice);
+      case "newest": return filtered.sort((a, b) => new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime());
       default:
-        // Simple relevance scoring based on search term matches in name vs description
         if (searchTerm) {
           const searchLower = searchTerm.toLowerCase();
           return filtered.sort((a, b) => {
-            const aNameMatch = a.name.toLowerCase().includes(searchLower) ? 2 : 0;
-            const aCategoryMatch = a.category.toLowerCase().includes(searchLower) ? 1 : 0;
-            const bNameMatch = b.name.toLowerCase().includes(searchLower) ? 2 : 0;
-            const bCategoryMatch = b.category.toLowerCase().includes(searchLower) ? 1 : 0;
-            
-            return (bNameMatch + bCategoryMatch) - (aNameMatch + aCategoryMatch);
+            const aScore = (a.name.toLowerCase().includes(searchLower) ? 2 : 0) + (a.category.toLowerCase().includes(searchLower) ? 1 : 0);
+            const bScore = (b.name.toLowerCase().includes(searchLower) ? 2 : 0) + (b.category.toLowerCase().includes(searchLower) ? 1 : 0);
+            return bScore - aScore;
           });
         }
         return filtered;
@@ -134,9 +106,9 @@ const SearchResults = () => {
   };
 
   const activeFiltersCount = [
-    selectedCategory !== "all" ? selectedCategory : null,
-    selectedSubcategory !== "all" ? selectedSubcategory : null,
-    priceRange !== "all" ? priceRange : null
+    selectedCategory !== "all",
+    selectedSubcategory !== "all",
+    priceRange !== "all"
   ].filter(Boolean).length;
 
   const handleSearch = (e: React.FormEvent) => {
@@ -145,228 +117,140 @@ const SearchResults = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-playful-base font-fredoka">
       <Header />
-      
-      <main className="py-8 px-4">
+
+      <main className="py-8 md:py-12 px-4">
         <div className="max-w-7xl mx-auto">
-          {/* Search Header */}
           <div className="mb-8">
             <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between mb-4">
               <div>
-                <h1 className="text-3xl font-bold text-foreground mb-2">
-                  {searchTerm ? `Search results for "${searchTerm}"` : "Search Products"}
+                <h1 className="text-4xl md:text-5xl font-bold text-playful-primary animate-jump">
+                  {searchTerm ? `Results for "${searchTerm}"` : "Search Our Toys!"}
                 </h1>
-                <p className="text-muted-foreground">
-                  {searchResults.length} product{searchResults.length !== 1 ? 's' : ''} found
-                  {searchTerm && ` for "${searchTerm}"`}
+                <p className="text-playful-dark mt-2">
+                  {searchResults.length} happy product{searchResults.length !== 1 ? 's' : ''} found!
                 </p>
               </div>
-              
-              {/* Mobile Filter Toggle */}
-              <Button 
-                variant="outline" 
+
+              <Button
+                variant="playful"
                 onClick={() => setShowFilters(!showFilters)}
                 className="md:hidden"
               >
-                <SlidersHorizontal className="h-4 w-4 mr-2" />
+                <SlidersHorizontal className="h-5 w-5 mr-2" />
                 Filters {activeFiltersCount > 0 && `(${activeFiltersCount})`}
               </Button>
             </div>
 
-            {/* Search Bar */}
             <form onSubmit={handleSearch} className="max-w-2xl">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-playful-primary h-6 w-6" />
                 <Input
                   type="text"
-                  placeholder="Search for toys, clothes, baby care..."
+                  placeholder="Search for fun things..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-12 pr-4 py-3 text-base"
+                  className="pl-14 pr-28 py-3 text-lg h-14 rounded-xl border-2 border-black shadow-2d focus:shadow-2d-hover"
                 />
-                <Button type="submit" className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                <Button type="submit" size="lg" className="absolute right-2 top-1/2 transform -translate-y-1/2">
                   Search
                 </Button>
               </div>
             </form>
           </div>
 
-          {/* Filters Section */}
-          <div className={`bg-card rounded-lg p-6 shadow-card mb-8 ${showFilters ? 'block' : 'hidden md:block'}`}>
+          <div className={`bg-white rounded-2xl border-2 border-black shadow-2d p-6 mb-8 ${showFilters ? 'block' : 'hidden md:block'}`}>
             <div className="flex flex-col gap-4">
               <div className="flex items-center gap-2 mb-2">
-                <Filter className="h-4 w-4 text-muted-foreground" />
-                <span className="font-medium">Filter Results</span>
+                <Filter className="h-5 w-5 text-playful-primary" />
+                <span className="font-bold text-xl text-playful-primary">Filter Results</span>
               </div>
 
-              {/* Filter Row */}
-              <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
-                <div className="flex flex-wrap gap-4 flex-1">
-                  {/* Category Filter */}
-                  <Select value={selectedCategory} onValueChange={(value) => {
-                    setSelectedCategory(value);
-                    setSelectedSubcategory("all");
-                  }}>
-                    <SelectTrigger className="w-full md:w-48">
-                      <SelectValue placeholder="All Categories" />
-                    </SelectTrigger>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <Select value={selectedCategory} onValueChange={(v) => { setSelectedCategory(v); setSelectedSubcategory("all"); }}>
+                  <SelectTrigger className="h-12 text-base"><SelectValue placeholder="All Categories" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Categories</SelectItem>
+                    {categories.map(c => <SelectItem key={c.name} value={c.name}>{c.name}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+
+                {availableSubcategories.length > 0 && (
+                  <Select value={selectedSubcategory} onValueChange={setSelectedSubcategory}>
+                    <SelectTrigger className="h-12 text-base"><SelectValue placeholder="All Subcategories" /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Categories</SelectItem>
-                      {categories.map(category => (
-                        <SelectItem key={category.name} value={category.name}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
+                      <SelectItem value="all">All Subcategories</SelectItem>
+                      {availableSubcategories.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                     </SelectContent>
                   </Select>
-
-                  {/* Subcategory Filter */}
-                  {availableSubcategories.length > 0 && (
-                    <Select value={selectedSubcategory} onValueChange={setSelectedSubcategory}>
-                      <SelectTrigger className="w-full md:w-48">
-                        <SelectValue placeholder="All Subcategories" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Subcategories</SelectItem>
-                        {availableSubcategories.map(subcategory => (
-                          <SelectItem key={subcategory} value={subcategory}>
-                            {subcategory}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  )}
-
-                  {/* Price Filter */}
-                  <Select value={priceRange} onValueChange={setPriceRange}>
-                    <SelectTrigger className="w-full md:w-48">
-                      <SelectValue placeholder="Price Range" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Prices</SelectItem>
-                      <SelectItem value="0-500">₹0 - ₹500</SelectItem>
-                      <SelectItem value="500-1000">₹500 - ₹1000</SelectItem>
-                      <SelectItem value="1000-2000">₹1000 - ₹2000</SelectItem>
-                      <SelectItem value="2000+">₹2000+</SelectItem>
-                    </SelectContent>
-                  </Select>
-
-                  {/* Sort By */}
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-full md:w-48">
-                      <SelectValue placeholder="Sort By" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="relevance">Most Relevant</SelectItem>
-                      <SelectItem value="price-low">Price: Low to High</SelectItem>
-                      <SelectItem value="price-high">Price: High to Low</SelectItem>
-                      <SelectItem value="newest">Newest First</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Clear Filters */}
-                {activeFiltersCount > 0 && (
-                  <Button 
-                    variant="outline" 
-                    onClick={clearFilters}
-                    className="whitespace-nowrap"
-                  >
-                    <X className="h-4 w-4 mr-2" />
-                    Clear Filters ({activeFiltersCount})
-                  </Button>
                 )}
+
+                <Select value={priceRange} onValueChange={setPriceRange}>
+                  <SelectTrigger className="h-12 text-base"><SelectValue placeholder="Price Range" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Prices</SelectItem>
+                    <SelectItem value="0-500">₹0 - ₹500</SelectItem>
+                    <SelectItem value="500-1000">₹500 - ₹1000</SelectItem>
+                    <SelectItem value="1000-2000">₹1000 - ₹2000</SelectItem>
+                    <SelectItem value="2000+">₹2000+</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="h-12 text-base"><SelectValue placeholder="Sort By" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="relevance">Most Relevant</SelectItem>
+                    <SelectItem value="price-low">Price: Low to High</SelectItem>
+                    <SelectItem value="price-high">Price: High to Low</SelectItem>
+                    <SelectItem value="newest">Newest First</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
-              {/* Active Filters Display */}
               {activeFiltersCount > 0 && (
-                <div className="flex flex-wrap gap-2 pt-2 border-t">
-                  {selectedCategory !== "all" && (
-                    <Badge variant="secondary" className="gap-1">
-                      Category: {selectedCategory}
-                      <X 
-                        className="h-3 w-3 cursor-pointer" 
-                        onClick={() => setSelectedCategory("all")}
-                      />
-                    </Badge>
-                  )}
-                  {selectedSubcategory !== "all" && (
-                    <Badge variant="secondary" className="gap-1">
-                      Subcategory: {selectedSubcategory}
-                      <X 
-                        className="h-3 w-3 cursor-pointer" 
-                        onClick={() => setSelectedSubcategory("all")}
-                      />
-                    </Badge>
-                  )}
-                  {priceRange !== "all" && (
-                    <Badge variant="secondary" className="gap-1">
-                      Price: ₹{priceRange.replace("-", " - ₹")}
-                      <X 
-                        className="h-3 w-3 cursor-pointer" 
-                        onClick={() => setPriceRange("all")}
-                      />
-                    </Badge>
-                  )}
+                <div className="flex flex-wrap gap-2 pt-4 border-t-2 border-dashed mt-4">
+                  <div className="flex items-center gap-4 w-full">
+                    <span className="font-bold">Active Filters:</span>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedCategory !== "all" && <Badge variant="playful" className="gap-1">Category: {selectedCategory} <X className="h-4 w-4 cursor-pointer" onClick={() => setSelectedCategory("all")} /></Badge>}
+                      {selectedSubcategory !== "all" && <Badge variant="playful" className="gap-1">Sub: {selectedSubcategory} <X className="h-4 w-4 cursor-pointer" onClick={() => setSelectedSubcategory("all")} /></Badge>}
+                      {priceRange !== "all" && <Badge variant="playful" className="gap-1">Price: ₹{priceRange.replace("-", "-₹")} <X className="h-4 w-4 cursor-pointer" onClick={() => setPriceRange("all")} /></Badge>}
+                    </div>
+                    <Button variant="ghost" onClick={clearFilters} className="ml-auto whitespace-nowrap text-sm">
+                      <X className="h-4 w-4 mr-1" /> Clear All
+                    </Button>
+                  </div>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Search Results */}
           {searchResults.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {searchResults.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+              {searchResults.map((product) => <ProductCard key={product.id} product={product} />)}
             </div>
           ) : (
-            <div className="text-center py-16">
-              <div className="text-6xl mb-4">🔍</div>
-              <h3 className="text-2xl font-semibold text-foreground mb-2">
-                {searchTerm ? "No results found" : "Start searching"}
+            <div className="text-center py-16 bg-white rounded-2xl border-2 border-black shadow-2d">
+              <Frown className="w-24 h-24 mx-auto text-playful-secondary animate-bounce" />
+              <h3 className="text-3xl font-bold text-playful-primary mt-6">
+                Oh no! No results found.
               </h3>
-              <p className="text-muted-foreground mb-6">
-                {searchTerm 
-                  ? `No products match your search for "${searchTerm}". Try different keywords or adjust your filters.`
-                  : "Enter a search term to find products"
-                }
+              <p className="text-playful-dark mt-2 mb-6">
+                Try a different search word or change your filters!
               </p>
-              {activeFiltersCount > 0 && (
-                <Button onClick={clearFilters} variant="outline" className="mb-4">
-                  Clear All Filters
-                </Button>
-              )}
-              {searchTerm && (
-                <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground">Try searching for:</p>
-                  <div className="flex flex-wrap gap-2 justify-center">
-                    {["toys", "clothing", "baby care", "feeding", "diapers"].map((suggestion) => (
-                      <Button
-                        key={suggestion}
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setSearchTerm(suggestion);
-                          updateSearchParams(suggestion);
-                        }}
-                      >
-                        {suggestion}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Load More Button */}
-          {searchResults.length > 12 && (
-            <div className="text-center mt-12">
-              <Button variant="outline" size="lg">
-                Load More Results
-              </Button>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {["toys", "clothes", "diapers", "stroller"].map((suggestion) => (
+                  <Button
+                    key={suggestion}
+                    variant="outline"
+                    size="lg"
+                    onClick={() => { setSearchTerm(suggestion); updateSearchParams(suggestion); }}
+                  >
+                    Search "{suggestion}"
+                  </Button>
+                ))}
+              </div>
             </div>
           )}
         </div>

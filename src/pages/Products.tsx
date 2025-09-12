@@ -158,37 +158,37 @@ const Products = () => {
   ].filter(Boolean).length;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-playful-background font-sans">
       <Header />
 
       <main className="py-8 px-4">
         <div className="max-w-7xl mx-auto">
           {/* Page Header */}
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-foreground mb-4">All Products</h1>
-            <p className="text-lg text-muted-foreground">
-              Discover our complete collection of baby products ({filteredProducts.length} products)
+          <div className="mb-8 text-center">
+            <h1 className="text-5xl md:text-6xl font-bold text-playful-foreground mb-4 animate-jump">All Our Treasures</h1>
+            <p className="text-lg text-playful-foreground/80">
+              Find everything your little one needs! ({filteredProducts.length} goodies found)
             </p>
           </div>
 
           {/* Filters and Search */}
-          <div className="bg-card rounded-lg p-6 shadow-card mb-8">
+          <div className="bg-white rounded-2xl border-2 border-playful-foreground shadow-2d p-6 mb-8">
             <div className="flex flex-col gap-4">
               {/* Search */}
-              <div className="relative max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+              <div className="relative max-w-md mx-auto w-full">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-playful-foreground/50 h-5 w-5" />
                 <Input
                   type="text"
-                  placeholder="Search products..."
+                  placeholder="Search for fun stuff..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  className="pl-12 w-full"
                 />
               </div>
 
               {/* Filter Row */}
               <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
-                <div className="flex flex-wrap gap-4 flex-1">
+                <div className="flex flex-wrap gap-4 flex-1 justify-center">
                   {/* Category Filter */}
                   <Select value={selectedCategory} onValueChange={(value) => {
                     setSelectedCategory(value);
@@ -255,9 +255,9 @@ const Products = () => {
                 {/* Clear Filters */}
                 {activeFiltersCount > 0 && (
                   <Button
-                    variant="outline"
+                    variant="destructive"
                     onClick={clearFilters}
-                    className="whitespace-nowrap"
+                    className="whitespace-nowrap w-full md:w-auto animate-shake"
                   >
                     <X className="h-4 w-4 mr-2" />
                     Clear Filters ({activeFiltersCount})
@@ -267,39 +267,39 @@ const Products = () => {
 
               {/* Active Filters Display */}
               {activeFiltersCount > 0 && (
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 pt-4 border-t-2 border-dashed border-playful-foreground/20">
                   {searchTerm && (
-                    <Badge variant="secondary" className="gap-1">
+                    <Badge variant="playful" className="gap-1">
                       Search: "{searchTerm}"
                       <X
-                        className="h-3 w-3 cursor-pointer"
+                        className="h-3 w-3 cursor-pointer hover:scale-125 transition-transform"
                         onClick={() => setSearchTerm("")}
                       />
                     </Badge>
                   )}
                   {selectedCategory !== "all" && (
-                    <Badge variant="secondary" className="gap-1">
+                    <Badge variant="playful" className="gap-1">
                       Category: {selectedCategory}
                       <X
-                        className="h-3 w-3 cursor-pointer"
+                        className="h-3 w-3 cursor-pointer hover:scale-125 transition-transform"
                         onClick={() => setSelectedCategory("all")}
                       />
                     </Badge>
                   )}
                   {selectedSubcategory !== "all" && (
-                    <Badge variant="secondary" className="gap-1">
+                    <Badge variant="playful" className="gap-1">
                       Subcategory: {selectedSubcategory}
                       <X
-                        className="h-3 w-3 cursor-pointer"
+                        className="h-3 w-3 cursor-pointer hover:scale-125 transition-transform"
                         onClick={() => setSelectedSubcategory("all")}
                       />
                     </Badge>
                   )}
                   {priceRange !== "all" && (
-                    <Badge variant="secondary" className="gap-1">
+                    <Badge variant="playful" className="gap-1">
                       Price: ₹{priceRange.replace("-", " - ₹")}
                       <X
-                        className="h-3 w-3 cursor-pointer"
+                        className="h-3 w-3 cursor-pointer hover:scale-125 transition-transform"
                         onClick={() => setPriceRange("all")}
                       />
                     </Badge>
@@ -311,19 +311,19 @@ const Products = () => {
 
           {/* Products Grid */}
           {filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {filteredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
           ) : (
-            <div className="text-center py-16">
-              <div className="text-6xl mb-4">🔍</div>
-              <h3 className="text-2xl font-semibold text-foreground mb-2">No products found</h3>
-              <p className="text-muted-foreground mb-6">
-                Try adjusting your filters or search terms
+            <div className="text-center py-16 bg-white rounded-2xl border-2 border-playful-foreground shadow-2d">
+              <div className="text-6xl mb-4 animate-bounce">🧸</div>
+              <h3 className="text-3xl font-semibold text-playful-primary mb-2">Oops! No Treasures Here</h3>
+              <p className="text-playful-foreground/80 mb-6">
+                Try changing your magical filters to find some!
               </p>
-              <Button onClick={clearFilters} variant="outline">
+              <Button onClick={clearFilters} variant="default" size="lg">
                 Clear All Filters
               </Button>
             </div>
@@ -332,8 +332,8 @@ const Products = () => {
           {/* Load More Button - Show only if we have products and could potentially have more */}
           {filteredProducts.length > 0 && filteredProducts.length >= 12 && (
             <div className="text-center mt-12">
-              <Button variant="outline" size="lg">
-                Load More Products
+              <Button variant="outline" size="lg" className="animate-pulse">
+                Load More Goodies
               </Button>
             </div>
           )}

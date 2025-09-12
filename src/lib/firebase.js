@@ -1,4 +1,4 @@
-// Firebase initialization for Baby Souk Bloom
+// Firebase initialization for Baby Souk
 // Exports: db (Realtime Database), storage (Firebase Storage), auth (Firebase Auth)
 
 import { initializeApp } from "firebase/app";

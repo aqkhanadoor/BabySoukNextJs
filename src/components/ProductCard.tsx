@@ -35,23 +35,23 @@ const ProductCard = ({ product }: ProductCardProps) => {
   };
 
   return (
-    <Card className="group hover:shadow-playful transition-all duration-300 hover:-translate-y-1 bg-card border border-border/50">
-      <CardContent className="p-4">
+    <Card className="group bg-white rounded-3xl border-4 border-playful-foreground shadow-2d hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+      <CardContent className="p-4 flex-grow">
         {/* Product Image */}
         <Link to={productHref}>
-          <div className="relative mb-4 overflow-hidden rounded-lg bg-gradient-subtle cursor-pointer">
+          <div className="relative mb-4 overflow-hidden rounded-2xl border-2 border-playful-foreground bg-playful-accent/20 cursor-pointer">
             <img
               src={product.image}
               alt={product.name}
-              className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+              className="w-full h-48 object-contain group-hover:scale-110 transition-transform duration-300 p-4"
             />
             {discountPercentage > 0 && (
-              <Badge className="absolute top-2 left-2 bg-baby-orange text-foreground font-bold">
+              <Badge className="absolute top-2 left-2 bg-playful-primary text-white font-bold border-2 border-playful-foreground shadow-2d">
                 {discountPercentage}% OFF
               </Badge>
             )}
             {!product.inStock && (
-              <Badge variant="destructive" className="absolute top-2 right-2">
+              <Badge variant="destructive" className="absolute top-2 right-2 border-2 border-playful-foreground shadow-2d">
                 Out of Stock
               </Badge>
             )}
@@ -59,33 +59,23 @@ const ProductCard = ({ product }: ProductCardProps) => {
         </Link>
 
         {/* Product Info */}
-        <div className="space-y-2">
-          <Link to={productHref}>
-            <h3 className="font-semibold text-lg leading-tight line-clamp-2 text-foreground hover:text-primary transition-colors cursor-pointer">
+        <div className="space-y-2 flex-grow flex flex-col">
+          <Link to={productHref} className="flex-grow">
+            <h3 className="font-bold text-lg leading-tight line-clamp-2 text-playful-foreground hover:text-playful-primary transition-colors cursor-pointer">
               {product.name}
             </h3>
           </Link>
 
           {/* Price Section */}
-          <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold text-primary">
+          <div className="flex items-baseline gap-2 pt-2">
+            <span className="text-3xl font-bold text-playful-primary">
               ₹{product.specialPrice}
             </span>
             {product.mrp > product.specialPrice && (
-              <span className="text-sm text-muted-foreground line-through">
+              <span className="text-md text-playful-foreground/50 line-through">
                 ₹{product.mrp}
               </span>
             )}
-          </div>
-
-          {/* Category */}
-          <div className="flex gap-2">
-            <Badge variant="secondary" className="text-xs">
-              {product.category}
-            </Badge>
-            <Badge variant="outline" className="text-xs">
-              {product.subcategory}
-            </Badge>
           </div>
         </div>
       </CardContent>
@@ -93,12 +83,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
       <CardFooter className="p-4 pt-0">
         {/* Action Button */}
         <Button
-          variant="default"
-          className="w-full group-hover:shadow-button transition-all"
+          className="w-full text-md shadow-2d hover:shadow-none transition-all transform hover:-translate-y-1"
           disabled={!product.inStock}
           onClick={handleAddToCart}
         >
-          <ShoppingCart className="h-4 w-4 mr-2" />
+          <ShoppingCart className="h-5 w-5 mr-2" />
           Add to Cart
         </Button>
       </CardFooter>

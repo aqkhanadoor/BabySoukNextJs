@@ -1,3 +1,4 @@
+import AnimatedLogo from "./AnimatedLogo";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Search, Menu, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -32,29 +33,27 @@ const Header = () => {
   };
 
   return (
-    <header className="w-full bg-background shadow-card sticky top-0 z-50">
+    <header className="w-full bg-playful-background border-b-4 border-playful-foreground shadow-2d sticky top-0 z-50">
       {/* Main navigation */}
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-4 py-3">
         {/* Mobile Layout */}
         <div className="flex md:hidden items-center justify-between">
           {/* Mobile Menu Button - Left */}
-          <Button variant="ghost" size="icon" onClick={toggleMobileMenu}>
-            <Menu className="h-5 w-5" />
+          <Button variant="ghost" size="icon" onClick={toggleMobileMenu} className="hover:bg-playful-accent/20">
+            <Menu className="h-6 w-6 text-playful-foreground animate-jump" />
           </Button>
 
           {/* Logo - Center */}
           <Link to="/">
-            <h1 className="text-xl font-bold bg-gradient-rainbow bg-clip-text text-transparent hover:scale-105 transition-transform cursor-pointer">
-              Baby Souk
-            </h1>
+            <AnimatedLogo />
           </Link>
 
           {/* Cart - Right */}
           <Link to="/cart">
-            <Button variant="ghost" size="icon" className="relative">
-              <ShoppingCart className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className="relative hover:bg-playful-accent/20">
+              <ShoppingCart className="h-6 w-6 text-playful-foreground animate-float" />
               {state.itemCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-baby-pink text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-playful-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center border-2 border-playful-background animate-pulse-soft">
                   {state.itemCount}
                 </span>
               )}
@@ -67,51 +66,49 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/">
-              <h1 className="text-2xl font-bold bg-gradient-rainbow bg-clip-text text-transparent hover:scale-105 transition-transform cursor-pointer">
-                Baby Souk
-              </h1>
+              <AnimatedLogo />
             </Link>
           </div>
 
           {/* Navigation Links */}
-          <nav className="flex items-center space-x-6">
+          <nav className="flex items-center space-x-4">
             <Link to="/">
-              <Button variant="ghost" className="text-base font-medium hover:text-primary transition-colors">
+              <Button variant="ghost" className="text-lg font-medium hover:bg-playful-accent/20 hover:text-playful-primary transition-colors rounded-xl">
                 Home
               </Button>
             </Link>
             <Link to="/products">
-              <Button variant="ghost" className="text-base font-medium hover:text-primary transition-colors">
+              <Button variant="ghost" className="text-lg font-medium hover:bg-playful-accent/20 hover:text-playful-primary transition-colors rounded-xl">
                 Products
               </Button>
             </Link>
             <Link to="/categories">
-              <Button variant="ghost" className="text-base font-medium hover:text-primary transition-colors">
+              <Button variant="ghost" className="text-lg font-medium hover:bg-playful-accent/20 hover:text-playful-primary transition-colors rounded-xl">
                 Collections
               </Button>
             </Link>
           </nav>
 
           {/* Search Bar */}
-          <form onSubmit={handleSearch} className="flex flex-1 max-w-md mx-6">
+          <form onSubmit={handleSearch} className="flex flex-1 max-w-sm mx-4">
             <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-playful-foreground/50 h-5 w-5" />
               <input
                 type="text"
-                placeholder="Search products..."
+                placeholder="Search for fun stuff..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-input rounded-full focus:outline-none focus:ring-2 focus:ring-primary shadow-card"
+                className="w-full pl-12 pr-4 py-3 border-2 border-playful-foreground rounded-full focus:outline-none focus:ring-4 focus:ring-playful-accent/50 bg-white shadow-2d transition-all focus:shadow-none"
               />
             </div>
           </form>
 
           {/* Cart Icon */}
           <Link to="/cart">
-            <Button variant="ghost" size="icon" className="relative">
-              <ShoppingCart className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className="relative hover:bg-playful-accent/20">
+              <ShoppingCart className="h-7 w-7 text-playful-foreground animate-float" />
               {state.itemCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-baby-pink text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-playful-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center border-2 border-playful-background animate-pulse-soft">
                   {state.itemCount}
                 </span>
               )}
@@ -122,51 +119,49 @@ const Header = () => {
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 bg-black/50 z-50 md:hidden" onClick={toggleMobileMenu}>
-          <div 
-            className="fixed left-0 top-0 h-full w-full bg-background shadow-2xl animate-slide-in-right"
+        <div className="fixed inset-0 bg-black/60 z-50 md:hidden" onClick={toggleMobileMenu}>
+          <div
+            className="fixed left-0 top-0 h-full w-3/4 max-w-sm bg-playful-background border-r-4 border-playful-foreground shadow-2xl animate-slide-in-right"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Mobile Menu Header */}
-            <div className="flex items-center justify-between p-4 border-b">
+            <div className="flex items-center justify-between p-4 border-b-4 border-playful-foreground">
               <Link to="/" onClick={toggleMobileMenu}>
-                <h1 className="text-2xl font-bold bg-gradient-rainbow bg-clip-text text-transparent">
-                  Baby Souk
-                </h1>
+                <AnimatedLogo />
               </Link>
-              <Button variant="ghost" size="icon" onClick={toggleMobileMenu}>
-                <X className="h-5 w-5" />
+              <Button variant="ghost" size="icon" onClick={toggleMobileMenu} className="hover:bg-playful-accent/20">
+                <X className="h-6 w-6 text-playful-foreground" />
               </Button>
             </div>
 
             {/* Mobile Navigation */}
-            <nav className="flex flex-col p-4 space-y-4">
+            <nav className="flex flex-col p-4 space-y-2">
               <Link to="/" onClick={toggleMobileMenu}>
-                <Button variant="ghost" className="w-full justify-start text-lg font-medium hover:text-primary transition-colors">
+                <Button variant="ghost" className="w-full justify-start text-xl font-medium hover:bg-playful-accent/20 hover:text-playful-primary transition-colors rounded-lg py-6">
                   Home
                 </Button>
               </Link>
               <Link to="/products" onClick={toggleMobileMenu}>
-                <Button variant="ghost" className="w-full justify-start text-lg font-medium hover:text-primary transition-colors">
+                <Button variant="ghost" className="w-full justify-start text-xl font-medium hover:bg-playful-accent/20 hover:text-playful-primary transition-colors rounded-lg py-6">
                   Products
                 </Button>
               </Link>
               <Link to="/categories" onClick={toggleMobileMenu}>
-                <Button variant="ghost" className="w-full justify-start text-lg font-medium hover:text-primary transition-colors">
+                <Button variant="ghost" className="w-full justify-start text-xl font-medium hover:bg-playful-accent/20 hover:text-playful-primary transition-colors rounded-lg py-6">
                   Collections
                 </Button>
               </Link>
-              
+
               {/* Mobile Search */}
-              <form onSubmit={handleMobileSearch} className="pt-4">
+              <form onSubmit={handleMobileSearch} className="pt-6">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-playful-foreground/50 h-5 w-5" />
                   <input
                     type="text"
-                    placeholder="Search products..."
+                    placeholder="Search..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-input rounded-full focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full pl-12 pr-4 py-3 border-2 border-playful-foreground rounded-full focus:outline-none focus:ring-4 focus:ring-playful-accent/50 bg-white shadow-2d"
                   />
                 </div>
               </form>

@@ -9,14 +9,16 @@ import ThirdHero from "@/components/ThirdHero";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-playful-background overflow-hidden">
       <Header />
-      <HeroSection />
-      <CategorySection />
-      <SecondaryHero />
-      <ProductsSection />
-      <ThirdHero />
-      <FeaturesSection />
+      <main>
+        <HeroSection />
+        <CategorySection />
+        <SecondaryHero />
+        <ProductsSection />
+        <ThirdHero />
+        <FeaturesSection />
+      </main>
       <Footer />
     </div>
   );

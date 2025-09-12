@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { products as staticProducts, type Product } from "@/data/products";
-import { ShoppingCart, Heart, Share2, ArrowLeft, Star, Shield, Truck, RotateCcw } from "lucide-react";
+import { ShoppingCart, Heart, Share2, ArrowLeft, Star, ShieldCheck, Truck, RotateCcw, Wand2 } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import { db } from "@/lib/firebase";
@@ -86,25 +86,26 @@ const ProductDetail = () => {
     if (product) {
       addToCart(product);
       toast({
-        title: "Added to cart!",
-        description: `${product.name} has been added to your cart.`,
+        title: "Added to your treasure chest!",
+        description: `${product.name} is now in your cart.`,
       });
     }
   };
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-playful-background font-sans">
         <Header />
         <main className="py-16 px-4">
           <div className="max-w-2xl mx-auto text-center">
-            <h1 className="text-3xl font-bold text-foreground mb-4">Product Not Found</h1>
-            <p className="text-lg text-muted-foreground mb-8">
-              The product you're looking for doesn't exist.
+            <div className="text-8xl mb-6 animate-bounce">🤔</div>
+            <h1 className="text-4xl font-bold text-playful-foreground mb-4">Hmm, Nothing Here...</h1>
+            <p className="text-lg text-playful-foreground/80 mb-8">
+              The treasure you're looking for seems to have vanished!
             </p>
             <Link to="/products">
-              <Button variant="hero" size="lg">
-                Back to Products
+              <Button variant="default" size="lg">
+                Back to All Treasures
               </Button>
             </Link>
           </div>
@@ -117,39 +118,31 @@ const ProductDetail = () => {
   const discountPercentage = Math.round(((product.mrp - product.specialPrice) / product.mrp) * 100);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-playful-background font-sans">
       <Header />
 
       <main className="py-8 px-4">
         <div className="max-w-6xl mx-auto">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
-            <Link to="/" className="hover:text-primary">Home</Link>
+          <div className="flex items-center gap-2 text-sm text-playful-foreground/80 mb-6">
+            <Link to="/" className="hover:text-playful-primary font-semibold">Home</Link>
             <span>/</span>
-            <Link to="/products" className="hover:text-primary">Products</Link>
+            <Link to="/products" className="hover:text-playful-primary font-semibold">Products</Link>
             <span>/</span>
-            <span className="text-foreground">{product.name}</span>
+            <span className="text-playful-foreground font-bold">{product.name}</span>
           </div>
-
-          {/* Back Button */}
-          <Link to="/products">
-            <Button variant="ghost" className="mb-6">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Products
-            </Button>
-          </Link>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Product Image */}
             <div className="space-y-4">
-              <div className="relative overflow-hidden rounded-lg bg-gradient-subtle">
+              <div className="relative overflow-hidden rounded-2xl border-2 border-playful-foreground shadow-2d bg-white">
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-96 lg:h-[500px] object-cover"
+                  className="w-full h-96 lg:h-[500px] object-contain"
                 />
                 {discountPercentage > 0 && (
-                  <Badge className="absolute top-4 left-4 bg-baby-orange text-foreground font-bold text-lg px-3 py-1">
+                  <Badge className="absolute top-4 left-4 bg-playful-accent text-playful-accent-foreground font-bold text-lg px-3 py-1 animate-shake">
                     {discountPercentage}% OFF
                   </Badge>
                 )}
@@ -165,11 +158,11 @@ const ProductDetail = () => {
             <div className="space-y-6">
               <div>
                 <div className="flex gap-2 mb-3">
-                  <Badge variant="secondary">{product.category}</Badge>
+                  <Badge variant="playful">{product.category}</Badge>
                   <Badge variant="outline">{product.subcategory}</Badge>
                 </div>
 
-                <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+                <h1 className="text-4xl lg:text-5xl font-bold text-playful-foreground mb-4">
                   {product.name}
                 </h1>
 
@@ -177,25 +170,20 @@ const ProductDetail = () => {
                 <div className="flex items-center gap-2 mb-4">
                   <div className="flex items-center">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                      <Star key={i} className="h-6 w-6 fill-yellow-400 text-yellow-500" />
                     ))}
                   </div>
-                  <span className="text-sm text-muted-foreground">(4.8/5 • 156 reviews)</span>
+                  <span className="text-sm text-playful-foreground/80">(4.8/5 • 156 reviews)</span>
                 </div>
 
                 {/* Price */}
-                <div className="flex items-center gap-4 mb-6">
-                  <span className="text-4xl font-bold text-primary">
+                <div className="flex items-baseline gap-4 mb-6">
+                  <span className="text-5xl font-bold text-playful-primary">
                     ₹{product.specialPrice}
                   </span>
                   {product.mrp > product.specialPrice && (
-                    <span className="text-xl text-muted-foreground line-through">
+                    <span className="text-2xl text-playful-foreground/50 line-through">
                       ₹{product.mrp}
-                    </span>
-                  )}
-                  {discountPercentage > 0 && (
-                    <span className="text-lg font-semibold text-green-600">
-                      Save ₹{product.mrp - product.specialPrice}
                     </span>
                   )}
                 </div>
@@ -203,14 +191,14 @@ const ProductDetail = () => {
                 {/* Stock Status */}
                 <div className="mb-6">
                   {product.inStock ? (
-                    <div className="flex items-center gap-2 text-green-600">
-                      <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-                      <span className="font-medium">In Stock</span>
+                    <div className="flex items-center gap-2 text-green-600 font-bold">
+                      <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                      <span>In Stock & Ready to Ship!</span>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-2 text-red-600">
-                      <div className="w-2 h-2 bg-red-600 rounded-full"></div>
-                      <span className="font-medium">Out of Stock</span>
+                    <div className="flex items-center gap-2 text-red-600 font-bold">
+                      <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                      <span>Out of Stock</span>
                     </div>
                   )}
                 </div>
@@ -218,53 +206,48 @@ const ProductDetail = () => {
                 {/* Action Buttons */}
                 <div className="flex gap-4 mb-8">
                   <Button
-                    variant="hero"
+                    variant="default"
                     size="lg"
-                    className="flex-1"
+                    className="flex-1 animate-wiggle"
                     disabled={!product.inStock}
                     onClick={handleAddToCart}
                   >
                     <ShoppingCart className="h-5 w-5 mr-2" />
                     Add to Cart
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                  >
+                  <Button variant="outline" size="lg" className="hover:animate-shake">
                     <Heart className="h-5 w-5" />
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                  >
+                  <Button variant="outline" size="lg" className="hover:animate-shake">
                     <Share2 className="h-5 w-5" />
                   </Button>
                 </div>
 
                 {/* Features */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                  <div className="flex items-center gap-2 text-sm">
-                    <Shield className="h-4 w-4 text-green-600" />
-                    <span>Safe & Tested</span>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 text-center">
+                  <div className="flex flex-col items-center gap-2 p-3 bg-playful-background rounded-lg border-2 border-dashed border-playful-foreground/20">
+                    <ShieldCheck className="h-8 w-8 text-green-500" />
+                    <span className="text-sm font-semibold">100% Safe & Tested</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Truck className="h-4 w-4 text-blue-600" />
-                    <span>Free Delivery</span>
+                  <div className="flex flex-col items-center gap-2 p-3 bg-playful-background rounded-lg border-2 border-dashed border-playful-foreground/20">
+                    <Truck className="h-8 w-8 text-blue-500" />
+                    <span className="text-sm font-semibold">Fast & Free Delivery</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <RotateCcw className="h-4 w-4 text-orange-600" />
-                    <span>Easy Returns</span>
+                  <div className="flex flex-col items-center gap-2 p-3 bg-playful-background rounded-lg border-2 border-dashed border-playful-foreground/20">
+                    <RotateCcw className="h-8 w-8 text-orange-500" />
+                    <span className="text-sm font-semibold">Easy Peasy Returns</span>
                   </div>
                 </div>
 
-                <Separator />
+                <Separator className="border-2 border-dashed border-playful-foreground/20" />
 
                 {/* Description */}
-                <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-4">
-                    Product Description
+                <div className="mt-6">
+                  <h3 className="text-2xl font-bold text-playful-foreground mb-4 flex items-center gap-2">
+                    <Wand2 className="text-playful-secondary" />
+                    About this Treasure
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className="text-playful-foreground/80 leading-relaxed">
                     {product.description}
                   </p>
                 </div>
@@ -275,25 +258,25 @@ const ProductDetail = () => {
           {/* Product Specifications */}
           <Card className="mt-12">
             <CardContent className="p-6">
-              <h3 className="text-xl font-semibold text-foreground mb-4">
-                Product Specifications
+              <h3 className="text-2xl font-bold text-playful-foreground mb-4">
+                Product Details
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex justify-between py-2 border-b border-border">
-                  <span className="font-medium">Category</span>
-                  <span className="text-muted-foreground">{product.category}</span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                <div className="flex justify-between py-2 border-b-2 border-dashed border-playful-foreground/20">
+                  <span className="font-semibold">Category</span>
+                  <span className="text-playful-foreground/80">{product.category}</span>
                 </div>
-                <div className="flex justify-between py-2 border-b border-border">
-                  <span className="font-medium">Subcategory</span>
-                  <span className="text-muted-foreground">{product.subcategory}</span>
+                <div className="flex justify-between py-2 border-b-2 border-dashed border-playful-foreground/20">
+                  <span className="font-semibold">Subcategory</span>
+                  <span className="text-playful-foreground/80">{product.subcategory}</span>
                 </div>
-                <div className="flex justify-between py-2 border-b border-border">
-                  <span className="font-medium">Product ID</span>
-                  <span className="text-muted-foreground">BS-{product.id.padStart(4, '0')}</span>
+                <div className="flex justify-between py-2 border-b-2 border-dashed border-playful-foreground/20">
+                  <span className="font-semibold">Product ID</span>
+                  <span className="text-playful-foreground/80">BS-{product.id.padStart(4, '0')}</span>
                 </div>
-                <div className="flex justify-between py-2 border-b border-border">
-                  <span className="font-medium">Availability</span>
-                  <span className={product.inStock ? "text-green-600" : "text-red-600"}>
+                <div className="flex justify-between py-2 border-b-2 border-dashed border-playful-foreground/20">
+                  <span className="font-semibold">Availability</span>
+                  <span className={product.inStock ? "text-green-600 font-bold" : "text-red-600 font-bold"}>
                     {product.inStock ? "In Stock" : "Out of Stock"}
                   </span>
                 </div>

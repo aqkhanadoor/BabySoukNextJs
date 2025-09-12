@@ -59,15 +59,15 @@ const SecondaryHero = () => {
         return chosen.map((src, idx) => ({ src, idx })).filter(s => !!s.src);
     }, [isMobile, desktopImages, mobileImages]);
 
-    // Auto-swipe when we have 3 images
+    // Auto-swipe when we have 2+ images
     useEffect(() => {
         if (!api) return;
-        if (slides.length < 3) return;
+        if (slides.length < 2) return;
         const id = setInterval(() => api.scrollNext(), 5000);
         return () => clearInterval(id);
     }, [api, slides.length]);
 
-    // Track current for indicators (optional)
+    // Track current for indicators
     useEffect(() => {
         if (!api) return;
         setCurrent(api.selectedScrollSnap());
@@ -80,10 +80,10 @@ const SecondaryHero = () => {
         const href = (links[index] && links[index].trim()) || "/products";
         const isExternal = /^https?:\/\//i.test(href);
         const content = (
-            <div className="grid place-items-center">
-                <div className="relative w-full max-w-7xl rounded-2xl overflow-hidden shadow-playful transition-all duration-300 group-hover:shadow-2xl">
-                    <img src={src} className="w-full h-[340px] md:h-[500px] object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+            <div className="grid place-items-center p-2">
+                <div className="relative w-full max-w-7xl rounded-3xl overflow-hidden shadow-2d border-4 border-playful-foreground transition-all duration-300 group-hover:shadow-none group-hover:-translate-y-1">
+                    <img src={src} className="w-full h-[340px] md:h-[500px] object-cover transition-transform duration-300 group-hover:scale-105" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                 </div>
             </div>
         );
@@ -95,9 +95,8 @@ const SecondaryHero = () => {
     };
 
     return (
-        <section className="relative overflow-hidden">
-            <div className="container mx-auto px-4 py-12 md:py-20">
-                {/* When 2+ images: show carousel */}
+        <section className="relative overflow-hidden bg-playful-background py-12 md:py-20">
+            <div className="container mx-auto px-4">
                 {slides.length >= 2 ? (
                     <div className="relative">
                         <Carousel className="w-full" opts={{ loop: true }} setApi={setApi}>
@@ -108,15 +107,15 @@ const SecondaryHero = () => {
                                     </CarouselItem>
                                 ))}
                             </CarouselContent>
-                            <CarouselPrevious className="left-2 md:left-4" />
-                            <CarouselNext className="right-2 md:right-4" />
+                            <CarouselPrevious className="left-2 md:left-8" />
+                            <CarouselNext className="right-2 md:right-8" />
                         </Carousel>
-                        {/* Dot Indicators */}
-                        <div className="flex justify-center mt-6 gap-2">
+                        <div className="flex justify-center mt-6 gap-3">
                             {slides.slice(0, 3).map((_, i) => (
                                 <button
                                     key={i}
-                                    className={`w-3 h-3 rounded-full transition-all duration-300 ${current === i ? "bg-baby-yellow shadow-lg scale-110" : "bg-white/30 hover:bg-white/50"
+                                    onClick={() => api?.scrollTo(i)}
+                                    className={`w-4 h-4 rounded-full transition-all duration-300 border-2 border-playful-foreground ${current === i ? "bg-playful-primary scale-125 shadow-2d" : "bg-white/50 hover:bg-playful-accent/50"
                                         }`}
                                     aria-label={`Go to slide ${i + 1}`}
                                 />
