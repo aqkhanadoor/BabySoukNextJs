@@ -149,9 +149,43 @@ All colors MUST be HSL.
 
   body {
     @apply bg-playful-background text-playful-foreground font-sans;
+    /* Enhanced for mobile */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
 
   body:not(.admin-panel) {
     font-size: 80%;
+  }
+
+  /* Smooth scrolling for all browsers */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Mobile-first responsive font sizes */
+  @media (max-width: 640px) {
+    body {
+      font-size: 85%;
+    }
+  }
+
+  /* Enhanced touch targets for mobile */
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea,
+  a {
+    @apply touch-manipulation;
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Better text rendering */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 }

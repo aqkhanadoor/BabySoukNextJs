@@ -49,6 +49,7 @@ const Header = () => {
   const { state } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const router = useRouter();
 
   const toggleMobileMenu = () => {
@@ -88,14 +89,17 @@ const Header = () => {
             <AnimatedLogo />
           </Link>
 
-          {/* Cart - Right */}
+          {/* Enhanced Mobile Cart - Right */}
           <Link href="/cart">
-            <Button variant="ghost" size="icon" className="relative hover:bg-playful-accent/20">
-              <ShoppingCart className="h-6 w-6 text-playful-foreground animate-float" />
+            <Button variant="ghost" size="icon" className="relative hover:bg-playful-accent/20 group">
+              <ShoppingCart className="h-6 w-6 text-playful-foreground animate-float group-hover:text-playful-primary transition-colors" />
               {state.itemCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-playful-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center border-2 border-playful-background animate-pulse-soft">
-                  {state.itemCount}
-                </span>
+                <>
+                  <span className="absolute -top-1 -right-1 bg-playful-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center border-2 border-playful-background animate-bounce font-bold">
+                    {state.itemCount > 9 ? "9+" : state.itemCount}
+                  </span>
+                  <span className="absolute -top-2 -right-2 w-7 h-7 bg-playful-primary/20 rounded-full animate-ping"></span>
+                </>
               )}
             </Button>
           </Link>
@@ -150,27 +154,57 @@ const Header = () => {
             </NavigationMenu>
           </nav>
 
-          {/* Search Bar */}
-          <form onSubmit={handleSearch} className="flex flex-1 max-w-sm mx-4">
+          {/* Enhanced Search Bar */}
+          <form onSubmit={handleSearch} className="flex flex-1 max-w-md mx-4">
             <div className="relative w-full">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-playful-foreground/50 h-5 w-5" />
+              <Search className={`absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 transition-colors ${isSearchFocused ? "text-playful-primary" : "text-playful-foreground/50"
+                }`} />
               <input
                 type="text"
-                placeholder="Search for fun stuff..."
+                placeholder="Search toys, clothes, care products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border-2 border-playful-foreground rounded-full focus:outline-none focus:ring-4 focus:ring-playful-accent/50 bg-white shadow-2d transition-all focus:shadow-none"
+                onFocus={() => setIsSearchFocused(true)}
+                onBlur={() => setIsSearchFocused(false)}
+                className={`w-full pl-12 pr-16 py-3 border-2 rounded-full bg-white shadow-2d transition-all duration-300 focus:outline-none ${isSearchFocused
+                    ? "border-playful-primary focus:ring-4 focus:ring-playful-primary/30 focus:shadow-lg transform scale-105"
+                    : "border-playful-foreground hover:border-playful-primary/50 focus:shadow-none"
+                  }`}
               />
+              {searchTerm && (
+                <button
+                  type="button"
+                  onClick={() => setSearchTerm("")}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-playful-foreground/50 hover:text-playful-primary transition-colors"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              )}
+              <button
+                type="submit"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-playful-primary text-white p-2 rounded-full hover:bg-playful-primary/90 transition-all hover:scale-110 shadow-sm"
+                disabled={!searchTerm.trim()}
+              >
+                <Search className="h-4 w-4" />
+              </button>
             </div>
           </form>
 
-          {/* Cart Icon */}
+          {/* Enhanced Cart Icon */}
           <Link href="/cart">
-            <Button variant="ghost" size="icon" className="relative hover:bg-playful-accent/20">
-              <ShoppingCart className="h-7 w-7 text-playful-foreground animate-float" />
+            <Button variant="ghost" size="icon" className="relative hover:bg-playful-accent/20 group transition-all hover:scale-110">
+              <ShoppingCart className="h-7 w-7 text-playful-foreground animate-float group-hover:text-playful-primary transition-colors" />
               {state.itemCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-playful-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center border-2 border-playful-background animate-pulse-soft">
-                  {state.itemCount}
+                <>
+                  <span className="absolute -top-1 -right-1 bg-playful-primary text-white text-xs rounded-full h-6 w-6 flex items-center justify-center border-2 border-playful-background animate-bounce font-bold shadow-lg">
+                    {state.itemCount > 99 ? "99+" : state.itemCount}
+                  </span>
+                  <span className="absolute -top-2 -right-2 w-8 h-8 bg-playful-primary/20 rounded-full animate-ping"></span>
+                </>
+              )}
+              {state.itemCount === 0 && (
+                <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-playful-foreground/70 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                  Cart is empty
                 </span>
               )}
             </Button>
@@ -213,17 +247,33 @@ const Header = () => {
                 </Button>
               </Link>
 
-              {/* Mobile Search */}
+              {/* Enhanced Mobile Search */}
               <form onSubmit={handleMobileSearch} className="pt-6">
                 <div className="relative">
                   <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-playful-foreground/50 h-5 w-5" />
                   <input
                     type="text"
-                    placeholder="Search..."
+                    placeholder="Search toys, clothes, care..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 border-2 border-playful-foreground rounded-full focus:outline-none focus:ring-4 focus:ring-playful-accent/50 bg-white shadow-2d"
+                    className="w-full pl-12 pr-16 py-3 border-2 border-playful-foreground rounded-full focus:outline-none focus:ring-4 focus:ring-playful-primary/30 bg-white shadow-2d focus:border-playful-primary"
                   />
+                  {searchTerm && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchTerm("")}
+                      className="absolute right-12 top-1/2 transform -translate-y-1/2 text-playful-foreground/50 hover:text-playful-primary transition-colors"
+                    >
+                      <X className="h-5 w-5" />
+                    </button>
+                  )}
+                  <button
+                    type="submit"
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-playful-primary text-white p-2 rounded-full hover:bg-playful-primary/90 transition-all disabled:opacity-50"
+                    disabled={!searchTerm.trim()}
+                  >
+                    <Search className="h-4 w-4" />
+                  </button>
                 </div>
               </form>
             </nav>

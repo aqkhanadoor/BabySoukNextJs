@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
+import { ProductCardSkeleton } from "@/components/LoadingSpinner";
 import { categories } from "@/config/categories";
 import { type Product, type ProductRecord } from "@/types/product";
 import { Button } from "@/components/ui/button";
@@ -306,14 +307,7 @@ export default function ProductsPage() {
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" aria-label="Loading products">
                             {Array.from({ length: 8 }).map((_, i) => (
-                                <div key={i} className="animate-pulse h-80 rounded-2xl border-2 border-playful-foreground bg-white flex flex-col">
-                                    <div className="h-48 w-full bg-playful-foreground/10 border-b-2 border-dashed border-playful-foreground/20" />
-                                    <div className="p-4 space-y-3 flex-1">
-                                        <div className="h-6 bg-playful-foreground/10 rounded w-3/4" />
-                                        <div className="h-6 bg-playful-foreground/10 rounded w-1/2" />
-                                        <div className="h-8 bg-playful-foreground/10 rounded w-2/3 mt-4" />
-                                    </div>
-                                </div>
+                                <ProductCardSkeleton key={i} />
                             ))}
                         </div>
                     )}
