@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import ProductCard from "./ProductCard";
-import { products as fallbackProducts, type Product } from "@/data/products";
+import { type Product } from "@/types/product";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { db } from "@/lib/firebase";
@@ -65,9 +65,7 @@ const ProductsSection = () => {
     return () => unsub();
   }, []);
 
-  const displayProducts = useMemo(() => {
-    return remoteProducts.length > 0 ? remoteProducts : fallbackProducts.slice(0, 8);
-  }, [remoteProducts]);
+  const displayProducts = remoteProducts.slice(0, 8);
 
   return (
     <section className="py-16 px-4 bg-playful-background">
@@ -83,11 +81,19 @@ const ProductsSection = () => {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          {displayProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {displayProducts.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+            {displayProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12" aria-label="Loading featured products">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="h-80 bg-white rounded-3xl border-4 border-playful-foreground shadow-2d animate-pulse flex flex-col" />
+            ))}
+          </div>
+        )}
 
         {/* View All Button */}
         <div className="text-center">

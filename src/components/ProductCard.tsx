@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCart } from "lucide-react";
-import { Product } from "@/data/products";
+import { Product } from "@/types/product";
 import { Link } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
@@ -41,7 +41,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <Link to={productHref}>
           <div className="relative mb-4 overflow-hidden rounded-2xl border-2 border-playful-foreground bg-playful-accent/20 cursor-pointer">
             <img
-              src={product.image}
+              src={(product as any).image || (product.images && product.images[0]) || '/placeholder.svg'}
               alt={product.name}
               className="w-full h-48 object-contain group-hover:scale-110 transition-transform duration-300 p-4"
             />

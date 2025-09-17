@@ -3,7 +3,8 @@ import { useSearchParams } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
-import { products as staticProducts, categories, type Product } from "@/data/products";
+import { categories } from "@/config/categories";
+import { type Product } from "@/types/product";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
@@ -35,17 +36,21 @@ const Products = () => {
   const [loaded, setLoaded] = useState(false);
 
   // Initialize filters from URL parameters
+  // Initialize category filter from URL (?category=...) ignoring case
   useEffect(() => {
     const categoryFromUrl = searchParams.get("category");
     if (categoryFromUrl) {
-      setSelectedCategory(categoryFromUrl);
+      const matched = categories.find(c => c.name.toLowerCase() === categoryFromUrl.toLowerCase());
+      if (matched) {
+        setSelectedCategory(matched.name); // preserve original casing
+      }
     }
   }, [searchParams]);
 
   // Get subcategories for selected category
   const availableSubcategories = useMemo(() => {
     if (selectedCategory === "all") return [];
-    const category = categories.find(cat => cat.name === selectedCategory);
+    const category = categories.find(cat => cat.name.toLowerCase() === selectedCategory.toLowerCase());
     return category?.subcategories || [];
   }, [selectedCategory]);
 
@@ -72,7 +77,7 @@ const Products = () => {
           name: p.name,
           mrp,
           specialPrice,
-          image,
+          images: Array.isArray(p.images) && p.images.length ? p.images : [image],
           description: p.description || "",
           category: p.category || "Misc",
           subcategory: p.subcategory || "",
@@ -89,7 +94,7 @@ const Products = () => {
   }, []);
 
   // Filter and sort products
-  const dataSource: Product[] = remoteProducts.length > 0 ? remoteProducts : staticProducts;
+  const dataSource: Product[] = remoteProducts;
 
   const filteredProducts = useMemo(() => {
     let filtered = dataSource.filter(product => {
@@ -98,13 +103,13 @@ const Products = () => {
         return false;
       }
 
-      // Category filter
-      if (selectedCategory !== "all" && product.category !== selectedCategory) {
+      // Category filter (case-insensitive)
+      if (selectedCategory !== "all" && product.category.toLowerCase() !== selectedCategory.toLowerCase()) {
         return false;
       }
 
-      // Subcategory filter
-      if (selectedSubcategory !== "all" && product.subcategory !== selectedSubcategory) {
+      // Subcategory filter (case-insensitive)
+      if (selectedSubcategory !== "all" && product.subcategory?.toLowerCase() !== selectedSubcategory.toLowerCase()) {
         return false;
       }
 
@@ -167,7 +172,7 @@ const Products = () => {
           <div className="mb-8 text-center">
             <h1 className="text-5xl md:text-6xl font-bold text-playful-foreground mb-4 animate-jump">All Our Treasures</h1>
             <p className="text-lg text-playful-foreground/80">
-              Find everything your little one needs! ({filteredProducts.length} goodies found)
+              {loaded ? `Find everything your little one needs! (${filteredProducts.length} goodies found)` : 'Loading magical goodies…'}
             </p>
           </div>
 
@@ -310,13 +315,13 @@ const Products = () => {
           </div>
 
           {/* Products Grid */}
-          {filteredProducts.length > 0 ? (
+          {loaded && filteredProducts.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {filteredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
-          ) : (
+          ) : loaded ? (
             <div className="text-center py-16 bg-white rounded-2xl border-2 border-playful-foreground shadow-2d">
               <div className="text-6xl mb-4 animate-bounce">🧸</div>
               <h3 className="text-3xl font-semibold text-playful-primary mb-2">Oops! No Treasures Here</h3>
@@ -327,10 +332,23 @@ const Products = () => {
                 Clear All Filters
               </Button>
             </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" aria-label="Loading products">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="animate-pulse h-80 rounded-2xl border-2 border-playful-foreground bg-white flex flex-col">
+                  <div className="h-48 w-full bg-playful-foreground/10 border-b-2 border-dashed border-playful-foreground/20" />
+                  <div className="p-4 space-y-3 flex-1">
+                    <div className="h-6 bg-playful-foreground/10 rounded w-3/4" />
+                    <div className="h-6 bg-playful-foreground/10 rounded w-1/2" />
+                    <div className="h-8 bg-playful-foreground/10 rounded w-2/3 mt-4" />
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
 
           {/* Load More Button - Show only if we have products and could potentially have more */}
-          {filteredProducts.length > 0 && filteredProducts.length >= 12 && (
+          {loaded && filteredProducts.length > 0 && filteredProducts.length >= 12 && (
             <div className="text-center mt-12">
               <Button variant="outline" size="lg" className="animate-pulse">
                 Load More Goodies

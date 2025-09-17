@@ -8,7 +8,7 @@ import { NavLink, Outlet } from "react-router-dom";
 
 const AdminLayout = () => {
     return (
-        <div className="flex min-h-screen bg-gray-50">
+        <div className="admin-panel flex min-h-screen bg-gray-50">
             <aside className="w-64 bg-white border-r border-gray-200 p-4 flex flex-col">
                 <div className="flex items-center gap-2 mb-8">
                     <AnimatedLogo />

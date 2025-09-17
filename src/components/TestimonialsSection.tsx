@@ -1,28 +1,94 @@
-import { Star } from "lucide-react";
+import { FaStar, FaMale, FaFemale } from "react-icons/fa";
 
 const testimonials = [
     {
         name: "Anjali R.",
+        gender: "female" as const,
         location: "Kochi, Kerala",
         rating: 5,
         quote:
-            "BabySouk is the best in Kerala! I found everything I needed for my newborn. The quality is amazing and the delivery was so fast. Their customer support is the fastest and most helpful I have ever experienced.",
+            "BabySouk is the best in Kerala! I found everything I needed for my newborn. The quality is amazing and delivery was super fast. Their support is the fastest and most helpful I've experienced.",
         avatar: "/placeholder.svg",
     },
     {
         name: "Suresh K.",
-        location: "Trivandrum, Kerala",
+        gender: "male" as const,
+        location: "Thiruvananthapuram, Kerala",
         rating: 5,
         quote:
-            "I'm so impressed with the variety of products. It's my one-stop shop for all baby needs. The website is so easy to use and the checkout process is a breeze. Highly recommended!",
+            "Impressed with the variety. It's my one‑stop shop for baby gear. Smooth checkout and reliable shipping. Highly recommended!",
         avatar: "/placeholder.svg",
     },
     {
         name: "Fatima S.",
-        location: "Calicut, Kerala",
+        gender: "female" as const,
+        location: "Kozhikode, Kerala",
         rating: 5,
         quote:
-            "The customer service is outstanding. They were so helpful in answering my questions and guiding me to the right products. It's clear they care about their customers. Fastest response support for sure!",
+            "Outstanding customer service. They guided me to the right products and answered all my questions quickly. You can tell they care!",
+        avatar: "/placeholder.svg",
+    },
+    {
+        name: "Rahul N.",
+        gender: "male" as const,
+        location: "Ernakulam, Kerala",
+        rating: 4,
+        quote:
+            "Great prices and genuine products. The stroller we bought is sturdy and comfy. Delivery arrived a day earlier than expected!",
+        avatar: "/placeholder.svg",
+    },
+    {
+        name: "Neha P.",
+        gender: "female" as const,
+        location: "Thrissur, Kerala",
+        rating: 5,
+        quote:
+            "Beautiful collection for newborns. Loved the soft fabrics and eco‑friendly options. Will definitely shop again.",
+        avatar: "/placeholder.svg",
+    },
+    {
+        name: "Ibrahim M.",
+        gender: "male" as const,
+        location: "Malappuram, Kerala",
+        rating: 5,
+        quote:
+            "Customer care responded within minutes on WhatsApp and helped me pick the right bottle set. Fantastic experience!",
+        avatar: "/placeholder.svg",
+    },
+    {
+        name: "Aisha T.",
+        gender: "female" as const,
+        location: "Kannur, Kerala",
+        rating: 4,
+        quote:
+            "Quality is top‑notch and packaging was safe. The toys are exactly as described and my baby loves them.",
+        avatar: "/placeholder.svg",
+    },
+    {
+        name: "Deepak L.",
+        gender: "male" as const,
+        location: "Alappuzha, Kerala",
+        rating: 5,
+        quote:
+            "Fast shipping and genuine brands. The diaper bag is super practical and stylish. Totally worth it.",
+        avatar: "/placeholder.svg",
+    },
+    {
+        name: "Maria J.",
+        gender: "female" as const,
+        location: "Kottayam, Kerala",
+        rating: 5,
+        quote:
+            "Loved the curated collections—made gift shopping so easy. The size guide was accurate too!",
+        avatar: "/placeholder.svg",
+    },
+    {
+        name: "Arun V.",
+        gender: "male" as const,
+        location: "Palakkad, Kerala",
+        rating: 5,
+        quote:
+            "Seamless experience from browsing to delivery. The walker is sturdy and safe. Will recommend to friends.",
         avatar: "/placeholder.svg",
     },
 ];
@@ -39,16 +105,19 @@ const TestimonialsSection = () => {
                         Best in Kerala for a reason!
                     </p>
                 </div>
-                <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <div className="flex gap-6 overflow-x-auto no-scrollbar pb-2"
+                    style={{ scrollSnapType: 'x mandatory' }}
+                >
                     {testimonials.map((testimonial, index) => (
                         <div
                             key={index}
-                            className="flex flex-col justify-between p-6 bg-white rounded-2xl shadow-card"
+                            className="min-w-[280px] sm:min-w-[320px] md:min-w-[360px] flex flex-col justify-between p-6 bg-white rounded-2xl shadow-card"
+                            style={{ scrollSnapAlign: 'start' }}
                         >
                             <div>
                                 <div className="flex items-center mb-4">
                                     {Array.from({ length: testimonial.rating }).map((_, i) => (
-                                        <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                                        <FaStar key={i} className="h-5 w-5 text-yellow-400" />
                                     ))}
                                 </div>
                                 <p className="text-lg text-playful-foreground">
@@ -56,11 +125,17 @@ const TestimonialsSection = () => {
                                 </p>
                             </div>
                             <div className="flex items-center mt-6">
-                                <img
-                                    className="h-12 w-12 rounded-full object-cover"
-                                    src={testimonial.avatar}
-                                    alt={testimonial.name}
-                                />
+                                <div
+                                    className={`h-12 w-12 rounded-full flex items-center justify-center text-white shrink-0 ${testimonial.gender === "male" ? "bg-blue-500" : "bg-pink-500"
+                                        }`}
+                                    aria-label={`${testimonial.gender} avatar`}
+                                >
+                                    {testimonial.gender === "male" ? (
+                                        <FaMale className="h-6 w-6" />
+                                    ) : (
+                                        <FaFemale className="h-6 w-6" />
+                                    )}
+                                </div>
                                 <div className="ml-4">
                                     <p className="text-lg font-bold text-playful-foreground">
                                         {testimonial.name}

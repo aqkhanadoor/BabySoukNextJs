@@ -14,7 +14,10 @@ import { Badge } from "@/components/ui/badge";
 import ProductCard from "@/components/ProductCard";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { products, categories } from "@/data/products";
+import { categories } from "@/config/categories";
+import { type Product } from "@/types/product";
+import { db } from "@/lib/firebase";
+import { onValue, ref as dbRef } from "firebase/database";
 
 const SearchResults = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -24,6 +27,48 @@ const SearchResults = () => {
   const [priceRange, setPriceRange] = useState("all");
   const [sortBy, setSortBy] = useState("relevance");
   const [showFilters, setShowFilters] = useState(false);
+  const [remoteProducts, setRemoteProducts] = useState<Product[]>([]);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const ref = dbRef(db, "products");
+    const unsub = onValue(ref, (snap) => {
+      const val = snap.val() as Record<string, any> | null;
+      if (!val) {
+        setRemoteProducts([]);
+        setLoaded(true);
+        return;
+      }
+      const mapped: Product[] = Object.entries(val).map(([key, p]) => {
+        const price = Number(p.price ?? 0);
+        const dr = typeof p.discountRate === 'number' ? p.discountRate : 0;
+        const mrp = price;
+        const specialPrice = dr ? Math.round(price * (100 - dr) / 100) : price;
+        const images = Array.isArray(p.images) && p.images.length ? p.images : ["/placeholder.svg"];
+        const createdAtNum = typeof p.createdAt === 'number' ? p.createdAt : 0;
+        const dateStr = createdAtNum ? new Date(createdAtNum).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10);
+        return {
+          id: key,
+          slug: p.slug,
+          name: p.name,
+          mrp,
+          specialPrice,
+          images,
+          description: p.description || '',
+          category: p.category || 'Misc',
+          subcategory: p.subcategory || '',
+          inStock: typeof p.stock === 'number' ? p.stock > 0 : true,
+          dateAdded: dateStr,
+          colors: p.colors,
+          sizes: p.sizes,
+          tags: p.tags,
+        } as Product;
+      });
+      setRemoteProducts(mapped);
+      setLoaded(true);
+    });
+    return () => unsub();
+  }, []);
 
   useEffect(() => {
     const queryFromUrl = searchParams.get("q");
@@ -53,7 +98,7 @@ const SearchResults = () => {
   }, [selectedCategory]);
 
   const searchResults = useMemo(() => {
-    let filtered = products.filter(product => {
+    let filtered = remoteProducts.filter(product => {
       if (searchTerm) {
         const searchLower = searchTerm.toLowerCase();
         const matchesSearch =
@@ -96,7 +141,7 @@ const SearchResults = () => {
         }
         return filtered;
     }
-  }, [searchTerm, selectedCategory, selectedSubcategory, priceRange, sortBy]);
+  }, [searchTerm, selectedCategory, selectedSubcategory, priceRange, sortBy, remoteProducts]);
 
   const clearFilters = () => {
     setSelectedCategory("all");
@@ -129,7 +174,7 @@ const SearchResults = () => {
                   {searchTerm ? `Results for "${searchTerm}"` : "Search Our Toys!"}
                 </h1>
                 <p className="text-playful-dark mt-2">
-                  {searchResults.length} happy product{searchResults.length !== 1 ? 's' : ''} found!
+                  {loaded ? `${searchResults.length} happy product${searchResults.length !== 1 ? 's' : ''} found!` : 'Loading results...'}
                 </p>
               </div>
 
@@ -226,11 +271,11 @@ const SearchResults = () => {
             </div>
           </div>
 
-          {searchResults.length > 0 ? (
+          {loaded && searchResults.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
               {searchResults.map((product) => <ProductCard key={product.id} product={product} />)}
             </div>
-          ) : (
+          ) : loaded ? (
             <div className="text-center py-16 bg-white rounded-2xl border-2 border-black shadow-2d">
               <Frown className="w-24 h-24 mx-auto text-playful-secondary animate-bounce" />
               <h3 className="text-3xl font-bold text-playful-primary mt-6">
@@ -251,6 +296,12 @@ const SearchResults = () => {
                   </Button>
                 ))}
               </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8" aria-label="Loading search results">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="h-80 bg-white rounded-2xl border-2 border-black shadow-2d animate-pulse" />
+              ))}
             </div>
           )}
         </div>

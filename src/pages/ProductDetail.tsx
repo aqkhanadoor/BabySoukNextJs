@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { products as staticProducts, type Product } from "@/data/products";
+import { type Product } from "@/types/product";
 import { ShoppingCart, Heart, Share2, ArrowLeft, Star, ShieldCheck, Truck, RotateCcw, Wand2 } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
@@ -21,6 +21,7 @@ const ProductDetail = () => {
   const { toast } = useToast();
   const [remoteProduct, setRemoteProduct] = useState<Product | null>(null);
   const [loaded, setLoaded] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const { isInWishlist, toggleWishlist } = useWishlist(slug || '');
@@ -60,7 +61,7 @@ const ProductDetail = () => {
       const dr = typeof p.discountRate === "number" ? p.discountRate : 0;
       const mrp = price;
       const specialPrice = dr ? Math.round(price * (100 - dr) / 100) : price;
-      const image = Array.isArray(p.images) && p.images[0] ? p.images[0] : "/placeholder.svg";
+      const images = Array.isArray(p.images) && p.images.length > 0 ? p.images : ["/placeholder.svg"];
       const createdAtNum = typeof p.createdAt === "number" ? p.createdAt : 0;
       const dateStr = createdAtNum ? new Date(createdAtNum).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10);
       const mapped: Product = {
@@ -69,7 +70,7 @@ const ProductDetail = () => {
         name: p.name,
         mrp,
         specialPrice,
-        image,
+        images,
         description: p.description || "",
         category: p.category || "Misc",
         subcategory: p.subcategory || "",
@@ -77,6 +78,7 @@ const ProductDetail = () => {
         dateAdded: dateStr,
         colors: p.colors,
         sizes: p.sizes,
+        tags: p.tags,
       };
       setRemoteProduct(mapped);
       setLoaded(true);
@@ -93,15 +95,11 @@ const ProductDetail = () => {
       .replace(/\s+/g, "-")
       .replace(/-+/g, "-");
 
-  const product = useMemo(() => {
-    if (remoteProduct) return remoteProduct;
-    if (!slug) return null;
-    const bySlug = staticProducts.find(p => slugify(p.name) === slug);
-    return bySlug || null;
-  }, [remoteProduct, slug]);
+  const product = remoteProduct;
 
   useEffect(() => {
     if (product) {
+      setSelectedImage(product.images[0] || null);
       setSelectedColor(null);
       setSelectedSize(null);
     }
@@ -166,7 +164,7 @@ const ProductDetail = () => {
     }
   };
 
-  if (!product) {
+  if (loaded && !product) {
     return (
       <div className="min-h-screen bg-playful-background font-sans">
         <Header />
@@ -182,6 +180,40 @@ const ProductDetail = () => {
                 Back to All Treasures
               </Button>
             </Link>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!loaded) {
+    return (
+      <div className="min-h-screen bg-playful-background font-sans">
+        <Header />
+        <main className="py-16 px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="h-8 w-48 bg-playful-foreground/10 animate-pulse rounded mb-8" />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              <div className="space-y-4">
+                <div className="h-96 lg:h-[500px] w-full bg-white border-2 border-playful-foreground rounded-2xl animate-pulse" />
+                <div className="grid grid-cols-4 gap-4">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="h-24 bg-white border-2 border-dashed border-playful-foreground/20 rounded-lg animate-pulse" />
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-6">
+                <div className="h-10 bg-playful-foreground/10 rounded w-3/4 animate-pulse" />
+                <div className="h-8 bg-playful-foreground/10 rounded w-1/3 animate-pulse" />
+                <div className="space-y-3">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <div key={i} className="h-4 bg-playful-foreground/10 rounded w-full animate-pulse" />
+                  ))}
+                </div>
+                <div className="h-12 bg-playful-foreground/10 rounded w-full animate-pulse" />
+              </div>
+            </div>
           </div>
         </main>
         <Footer />
@@ -211,7 +243,7 @@ const ProductDetail = () => {
             <div className="space-y-4">
               <div className="relative overflow-hidden rounded-2xl border-2 border-playful-foreground shadow-2d bg-white">
                 <img
-                  src={product.image}
+                  src={selectedImage || product.images[0]}
                   alt={product.name}
                   className="w-full h-96 lg:h-[500px] object-contain"
                 />
@@ -226,6 +258,19 @@ const ProductDetail = () => {
                   </Badge>
                 )}
               </div>
+              {product.images.length > 1 && (
+                <div className="grid grid-cols-4 gap-4">
+                  {product.images.map((img, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedImage(img)}
+                      className={`rounded-lg overflow-hidden border-2 ${selectedImage === img ? 'border-playful-primary' : 'border-transparent'}`}
+                    >
+                      <img src={img} alt={`${product.name} thumbnail ${index + 1}`} className="w-full h-24 object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Product Details */}
@@ -234,6 +279,7 @@ const ProductDetail = () => {
                 <div className="flex gap-2 mb-3">
                   <Badge variant="playful">{product.category}</Badge>
                   <Badge variant="outline">{product.subcategory}</Badge>
+                  {product.tags?.map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}
                 </div>
 
                 <h1 className="text-4xl lg:text-5xl font-bold text-playful-foreground mb-4">

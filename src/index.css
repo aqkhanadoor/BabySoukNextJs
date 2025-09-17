@@ -150,4 +150,8 @@ All colors MUST be HSL.
   body {
     @apply bg-playful-background text-playful-foreground font-sans;
   }
+
+  body:not(.admin-panel) {
+    font-size: 80%;
+  }
 }

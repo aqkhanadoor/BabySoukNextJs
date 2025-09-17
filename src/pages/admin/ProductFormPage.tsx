@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { db, storage } from "@/lib/firebase";
 import { ref as dbRef, push, serverTimestamp, set, update } from "firebase/database";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { categories as staticCategories } from "@/data/products";
+import { categories as staticCategories } from "@/config/categories";
 import { useMemo, useState, useEffect, useReducer } from "react";
 
 type ProductForm = {

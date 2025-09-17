@@ -95,7 +95,7 @@ const Cart = () => {
                     {/* Product Image */}
                     <Link to={`/product/${item.product.slug || item.product.id}`}>
                       <img
-                        src={item.product.image}
+                        src={(item.product as any).image || (item.product.images && item.product.images[0]) || '/placeholder.svg'}
                         alt={item.product.name}
                         className="w-24 h-24 object-contain rounded-lg bg-white border-2 border-playful-foreground/20 hover:scale-105 transition-transform cursor-pointer"
                       />

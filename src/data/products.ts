@@ -17,7 +17,7 @@ export interface Product {
   name: string;
   mrp: number;
   specialPrice: number;
-  image: string;
+  images: string[];
   description: string;
   category: string;
   subcategory: string;
@@ -25,6 +25,7 @@ export interface Product {
   dateAdded: string;
   colors?: string[];
   sizes?: string[];
+  tags?: string[];
 }
 
 export const products: Product[] = [
@@ -34,12 +35,13 @@ export const products: Product[] = [
     name: "Soft Plush Teddy Bear",
     mrp: 1299,
     specialPrice: 899,
-    image: teddyBearImg,
+    images: [teddyBearImg],
     description: "Super soft and cuddly teddy bear perfect for babies and toddlers. Made with premium quality materials and completely safe for children. This adorable teddy bear is crafted from hypoallergenic fabrics and filled with high-quality stuffing that maintains its shape even after countless hugs. The embroidered eyes and nose ensure safety for young children, while the neutral brown color makes it suitable for any nursery decor.",
     category: "Toys",
     subcategory: "Stuffed Animals",
     inStock: true,
-    dateAdded: "2024-01-15"
+    dateAdded: "2024-01-15",
+    tags: ["Cuddly", "Hypoallergenic", "Gift Idea"]
   },
   {
     id: "2",
@@ -47,7 +49,7 @@ export const products: Product[] = [
     name: "Organic Cotton Baby Onesie",
     mrp: 799,
     specialPrice: 599,
-    image: babyOnesieImg,
+    images: [babyOnesieImg],
     description: "100% organic cotton onesie that's gentle on baby's sensitive skin. Available in multiple colors and sizes. This premium onesie is made from GOTS-certified organic cotton, ensuring no harmful chemicals touch your baby's delicate skin. Features convenient snap closures for easy diaper changes and reinforced seams for durability through countless washes.",
     category: "Clothing",
     subcategory: "Bodysuits",
@@ -55,6 +57,7 @@ export const products: Product[] = [
     dateAdded: "2024-01-20",
     colors: ["White", "Light Blue", "Pink", "Mint Green"],
     sizes: ["Newborn", "0-3M", "3-6M", "6-12M"],
+    tags: ["Organic", "Cotton", "Eco-friendly"]
   },
   {
     id: "3",
@@ -62,12 +65,13 @@ export const products: Product[] = [
     name: "Baby Care Gift Set",
     mrp: 1599,
     specialPrice: 1199,
-    image: babyCareSetImg, 
+    images: [babyCareSetImg], 
     description: "Complete baby care set including shampoo, lotion, powder and oil. All products are pediatrician approved and chemical-free. This comprehensive set contains everything you need for your baby's daily care routine. The tear-free shampoo, moisturizing lotion, gentle powder, and nourishing massage oil are all made with natural ingredients and free from parabens, sulfates, and artificial fragrances.",
     category: "Care",
     subcategory: "Bath & Body",
     inStock: true,
-    dateAdded: "2024-01-10"
+    dateAdded: "2024-01-10",
+    tags: ["Gift Set", "Sensitive Skin", "Complete Care"]
   },
   {
     id: "4",
@@ -75,12 +79,13 @@ export const products: Product[] = [
     name: "Educational Building Blocks",
     mrp: 999,
     specialPrice: 749,
-    image: buildingBlocksImg,
+    images: [buildingBlocksImg],
     description: "Colorful building blocks that help develop motor skills and creativity. Made from non-toxic materials with smooth edges. These 50-piece wooden blocks feature letters, numbers, and fun shapes that encourage learning through play. Each block is sanded smooth and finished with non-toxic, water-based paints that are safe for toddlers who love to explore with their mouths.",
     category: "Toys", 
     subcategory: "Learning Toys",
     inStock: true,
-    dateAdded: "2024-01-18"
+    dateAdded: "2024-01-18",
+    tags: ["Wooden", "Creative", "Educational"]
   },
   {
     id: "5",
@@ -88,12 +93,13 @@ export const products: Product[] = [
     name: "Baby Winter Jacket",
     mrp: 1899,
     specialPrice: 1399,
-    image: winterJacketImg,
+    images: [winterJacketImg],
     description: "Warm and cozy winter jacket to keep your baby comfortable. Water-resistant and machine washable. This premium winter jacket features a soft fleece lining and water-resistant outer shell to keep your little one warm and dry. The full-zip front makes dressing easy, while the hood provides extra protection from wind and cold weather.",
     category: "Clothing",
     subcategory: "Outerwear",
     inStock: false,
-    dateAdded: "2024-01-12"
+    dateAdded: "2024-01-12",
+    tags: ["Warm", "Fleece-lined", "Winter"]
   },
   {
     id: "6",
@@ -101,12 +107,13 @@ export const products: Product[] = [
     name: "Natural Baby Soap",
     mrp: 299,
     specialPrice: 249,
-    image: babySoapImg,
+    images: [babySoapImg],
     description: "Gentle and moisturizing baby soap made with natural ingredients. Perfect for daily use on delicate baby skin. This handcrafted soap is made with organic coconut oil, shea butter, and chamomile extract to cleanse and moisturize without irritation. Free from harsh chemicals, synthetic fragrances, and artificial colors.",
     category: "Care",
     subcategory: "Bath & Body",
     inStock: true,
-    dateAdded: "2024-01-22"
+    dateAdded: "2024-01-22",
+    tags: ["Natural", "Tear-free", "Moisturizing"]
   },
   {
     id: "7",
@@ -114,12 +121,13 @@ export const products: Product[] = [
     name: "Baby Feeding Bottle Set",
     mrp: 899,
     specialPrice: 699,
-    image: feedingBottlesImg,
+    images: [feedingBottlesImg],
     description: "BPA-free feeding bottles with anti-colic design. Perfect for transitioning from breastfeeding to bottle feeding. This set includes three bottles in different sizes (4oz, 6oz, 9oz) with slow, medium, and fast flow nipples. The wide-neck design makes filling and cleaning easy, while the anti-colic vent system reduces gas and fussiness.",
     category: "Feeding",
     subcategory: "Bottles",
     inStock: true,
-    dateAdded: "2024-01-25"
+    dateAdded: "2024-01-25",
+    tags: ["Anti-colic", "BPA-free", "Newborn"]
   },
   {
     id: "8",
@@ -127,12 +135,13 @@ export const products: Product[] = [
     name: "Musical Activity Toy",
     mrp: 1499,
     specialPrice: 1199,
-    image: musicalToyImg,
+    images: [musicalToyImg],
     description: "Interactive musical toy that stimulates baby's senses with lights, sounds, and textures. Great for cognitive development. This engaging activity center features 15 different melodies, colorful LED lights, and various textures to explore. Helps develop hand-eye coordination, cause-and-effect understanding, and auditory skills in babies 6 months and up.",
     category: "Toys",
     subcategory: "Musical Toys",
     inStock: true,
-    dateAdded: "2024-01-28"
+    dateAdded: "2024-01-28",
+    tags: ["Learning", "Musical", "Interactive"]
   },
   {
     id: "9",
@@ -140,12 +149,13 @@ export const products: Product[] = [
     name: "Baby Sleep Suit",
     mrp: 699,
     specialPrice: 499,
-    image: sleepSuitImg,
+    images: [sleepSuitImg],
     description: "Comfortable sleep suit made from breathable cotton. Designed for a peaceful night's sleep for your little one. This cozy sleep suit features a two-way zipper for easy diaper changes and fold-over mittens to prevent scratching. Made from organic cotton that's gentle on sensitive skin and helps regulate body temperature for better sleep.",
     category: "Clothing",
     subcategory: "Sleepwear",
     inStock: true,
-    dateAdded: "2024-01-30"
+    dateAdded: "2024-01-30",
+    tags: ["Breathable", "Comfortable", "2-way Zip"]
   },
   {
     id: "10",
@@ -153,12 +163,13 @@ export const products: Product[] = [
     name: "Baby Massage Oil",
     mrp: 399,
     specialPrice: 299,
-    image: massageOilImg,
+    images: [massageOilImg],
     description: "Natural massage oil enriched with coconut and almond oil. Perfect for baby's daily massage routine. This premium blend contains cold-pressed coconut oil, sweet almond oil, and vitamin E to nourish and protect delicate baby skin. Regular massage with this oil helps improve circulation, promotes better sleep, and strengthens the parent-child bond.",
     category: "Care",
     subcategory: "Massage & Skincare",
     inStock: true,
-    dateAdded: "2024-02-01"
+    dateAdded: "2024-02-01",
+    tags: ["Calming", "Natural", "Sleep-aid"]
   },
   {
     id: "11",
@@ -166,12 +177,13 @@ export const products: Product[] = [
     name: "High Chair for Feeding",
     mrp: 3999,
     specialPrice: 2999,
-    image: highChairImg,
+    images: [highChairImg],
     description: "Adjustable high chair with safety harness and removable tray. Perfect for meal times and easy to clean. This versatile high chair grows with your child from 6 months to toddler years. Features 6 height positions, 3 recline positions, and a 5-point safety harness. The removable tray is dishwasher safe, and the chair folds flat for storage.",
     category: "Furniture",
     subcategory: "High Chairs",
     inStock: true,
-    dateAdded: "2024-02-03"
+    dateAdded: "2024-02-03",
+    tags: ["Adjustable", "Safe", "Long-lasting"]
   },
   {
     id: "12",
@@ -179,12 +191,13 @@ export const products: Product[] = [
     name: "Baby Walker with Toys",
     mrp: 2499,
     specialPrice: 1899,
-    image: babyWalkerImg,
+    images: [babyWalkerImg],
     description: "Colorful baby walker with interactive toys and music. Helps baby learn to walk while having fun. This activity walker features a removable electronic toy bar with lights, sounds, and music. The padded seat rotates 360 degrees, and the walker folds flat for storage. Suitable for babies who can hold their head up unassisted, typically 4-16 months.",
     category: "Toys",
     subcategory: "Activity Toys",
     inStock: true,
-    dateAdded: "2024-02-05"
+    dateAdded: "2024-02-05",
+    tags: ["Developmental", "Interactive", "Music"]
   }
 ];
 

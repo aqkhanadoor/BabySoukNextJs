@@ -4,6 +4,43 @@ import { ShoppingCart, Search, Menu, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { useState } from "react";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
+import { categories } from "@/config/categories";
+import { cn } from "@/lib/utils";
+import React from "react";
+
+const ListItem = React.forwardRef<
+  React.ElementRef<"a">,
+  React.ComponentPropsWithoutRef<"a">
+>(({ className, title, children, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          ref={ref}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            className
+          )}
+          {...props}
+        >
+          <div className="text-sm font-medium leading-none">{title}</div>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+            {children}
+          </p>
+        </a>
+      </NavigationMenuLink>
+    </li>
+  );
+});
+ListItem.displayName = "ListItem";
 
 const Header = () => {
   const { state } = useCart();
@@ -72,21 +109,42 @@ const Header = () => {
 
           {/* Navigation Links */}
           <nav className="flex items-center space-x-4">
-            <Link to="/">
-              <Button variant="ghost" className="text-lg font-medium hover:bg-playful-accent/20 hover:text-playful-primary transition-colors rounded-xl">
-                Home
-              </Button>
-            </Link>
-            <Link to="/products">
-              <Button variant="ghost" className="text-lg font-medium hover:bg-playful-accent/20 hover:text-playful-primary transition-colors rounded-xl">
-                Products
-              </Button>
-            </Link>
-            <Link to="/categories">
-              <Button variant="ghost" className="text-lg font-medium hover:bg-playful-accent/20 hover:text-playful-primary transition-colors rounded-xl">
-                Collections
-              </Button>
-            </Link>
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <Link to="/">
+                    <Button variant="ghost" className="text-lg font-medium hover:bg-playful-accent/20 hover:text-playful-primary transition-colors rounded-xl">
+                      Home
+                    </Button>
+                  </Link>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <Link to="/products">
+                    <Button variant="ghost" className="text-lg font-medium hover:bg-playful-accent/20 hover:text-playful-primary transition-colors rounded-xl">
+                      Products
+                    </Button>
+                  </Link>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="text-lg font-medium hover:bg-playful-accent/20 hover:text-playful-primary transition-colors rounded-xl bg-transparent focus:bg-playful-accent/20 data-[state=open]:bg-playful-accent/20">
+                    <Link to="/categories" className="w-full h-full flex items-center">Collections</Link>
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                      {categories.map((category) => (
+                        <ListItem
+                          key={category.name}
+                          title={category.name}
+                          href={`/products?category=${category.name}`}
+                        >
+                          {category.subcategories.join(", ")}
+                        </ListItem>
+                      ))}
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
           </nav>
 
           {/* Search Bar */}

@@ -10,7 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { db, storage } from "@/lib/firebase";
 import { ref as dbRef, onValue, push, serverTimestamp, set, update, remove, get } from "firebase/database";
 import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { categories as staticCategories } from "@/data/products";
+import { categories as staticCategories } from "@/config/categories";
 import { generateSitemapXml } from "@/lib/sitemap";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
