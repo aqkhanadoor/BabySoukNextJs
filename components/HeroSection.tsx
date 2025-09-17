@@ -10,6 +10,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import type { CarouselApi } from "@/components/ui/carousel";
+import { HeroImage } from "@/components/SEO/OptimizedImage";
 
 const HeroSection = () => {
   const [api, setApi] = useState<CarouselApi>();
@@ -161,11 +162,10 @@ const HeroSection = () => {
                     <div className="absolute inset-0 bg-gradient-to-r from-playful-primary/20 via-playful-accent/20 to-playful-secondary/20 rounded-3xl blur-xl transform scale-110"></div>
 
                     <div className="relative rounded-3xl overflow-hidden border-4 border-playful-foreground shadow-2xl transform hover:scale-105 transition-all duration-500 bg-gradient-to-br from-playful-accent/20 to-playful-primary/10">
-                      <img
+                      <HeroImage
                         src="/assets/hero-banner.jpg"
-                        alt="Happy babies with toys and products"
+                        alt="Happy babies playing with premium toys and baby products at Baby Souk - your trusted online baby store"
                         className="w-full h-auto object-cover rounded-2xl"
-                        loading="eager"
                       />
 
                       {/* Overlay with floating elements */}

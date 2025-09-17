@@ -8,6 +8,7 @@ import { Product } from "@/types/product";
 import Link from "next/link";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
+import { ProductImage } from "@/components/SEO/OptimizedImage";
 import { useState } from "react";
 
 interface ProductCardProps {
@@ -18,7 +19,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
 
   const slugify = (text: string) =>
     text
@@ -74,18 +74,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
         {/* Product Image */}
         <Link href={productHref}>
           <div className="relative mb-4 overflow-hidden rounded-2xl border-2 border-playful-foreground bg-playful-accent/20 cursor-pointer group/image">
-            {!imageLoaded && (
-              <div className="absolute inset-0 bg-playful-accent/10 animate-pulse rounded-2xl flex items-center justify-center">
-                <div className="w-8 h-8 border-4 border-playful-primary border-t-transparent rounded-full animate-spin"></div>
-              </div>
-            )}
-            <img
-              src={(product as any).image || (product.images && product.images[0]) || '/placeholder.svg'}
-              alt={product.name}
-              className={`w-full h-48 object-contain transition-all duration-500 p-4 ${imageLoaded ? 'opacity-100 group-hover:scale-110' : 'opacity-0'
-                }`}
-              onLoad={() => setImageLoaded(true)}
-              loading="lazy"
+            <ProductImage
+              product={product}
+              imageIndex={0}
+              className="w-full h-48 object-contain transition-all duration-500 p-4 group-hover:scale-110"
             />
 
             {/* Badges */}
@@ -149,8 +141,8 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 <Star
                   key={i}
                   className={`h-4 w-4 ${i < randomRating
-                      ? 'fill-yellow-400 text-yellow-400'
-                      : 'text-gray-300'
+                    ? 'fill-yellow-400 text-yellow-400'
+                    : 'text-gray-300'
                     }`}
                 />
               ))}
