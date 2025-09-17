@@ -1,8 +1,9 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Star, Gift, Sparkles } from "lucide-react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { useState, useEffect } from "react";
-import heroBanner from "@/assets/hero-banner.jpg";
 import {
   Carousel,
   CarouselContent,
@@ -102,7 +103,7 @@ const HeroSection = () => {
                       {slide.description}
                     </p>
                     <div className="flex justify-center md:justify-start">
-                      <Link to={slide.buttonLink}>
+                      <Link href={slide.buttonLink}>
                         <Button size="xl" className="group text-lg shadow-2d hover:shadow-none transition-all transform hover:-translate-y-1">
                           {slide.buttonText}
                           <ArrowRight className="ml-2 h-6 w-6 group-hover:translate-x-2 transition-transform" />
@@ -115,7 +116,7 @@ const HeroSection = () => {
                   <div className="relative animate-float">
                     <div className="relative rounded-3xl overflow-hidden border-4 border-playful-foreground shadow-2d transform hover:scale-105 transition-transform duration-300 bg-playful-accent">
                       <img
-                        src={heroBanner}
+                        src="/assets/hero-banner.jpg"
                         alt="Baby products and toys"
                         className="w-full h-auto object-cover rounded-2xl"
                       />
@@ -134,8 +135,8 @@ const HeroSection = () => {
               key={index}
               onClick={() => scrollTo(index)}
               className={`w-4 h-4 rounded-full transition-all duration-300 border-2 border-playful-foreground ${current === index
-                  ? "bg-playful-primary scale-125 shadow-2d"
-                  : "bg-white/50 hover:bg-playful-accent/50"
+                ? "bg-playful-primary scale-125 shadow-2d"
+                : "bg-white/50 hover:bg-playful-accent/50"
                 }`}
               aria-label={`Go to slide ${index + 1}`}
             />

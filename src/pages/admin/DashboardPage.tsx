@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign, Package, Users, Activity, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";

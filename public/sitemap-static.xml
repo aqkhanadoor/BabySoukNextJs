@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  BACKUP/REFERENCE FILE - This is NOT the active sitemap.
+  
+  The application now serves dynamic sitemaps at /sitemap.xml (http://localhost:3000/sitemap.xml)
+  which automatically includes all products from the Firebase database.
+  
+  This file was renamed from sitemap.xml to sitemap-static.xml to avoid conflicts 
+  with the Next.js API route at app/sitemap.xml/route.ts.
+  
+  Active dynamic sitemap features:
+  - Automatically includes all products with URLs: /{category}/{slug}
+  - Updates in real-time when products are added/updated/deleted
+  - Managed through admin panel at /admin000/products
+  - Served from Firebase Realtime Database via REST API
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://babysouk.in/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+</urlset>

@@ -1,5 +1,7 @@
+"use client";
+
 import { useState, useMemo, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Search, Filter, X, SlidersHorizontal, Frown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,7 +22,8 @@ import { db } from "@/lib/firebase";
 import { onValue, ref as dbRef } from "firebase/database";
 
 const SearchResults = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedSubcategory, setSelectedSubcategory] = useState("all");
@@ -88,7 +91,7 @@ const SearchResults = () => {
     } else {
       newParams.delete("q");
     }
-    setSearchParams(newParams);
+    router.push(`/search?${newParams.toString()}`);
   };
 
   const availableSubcategories = useMemo(() => {

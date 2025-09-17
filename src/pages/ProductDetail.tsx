@@ -1,5 +1,8 @@
+"use client";
+
 import { useEffect, useMemo, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "next/navigation";
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -175,7 +178,7 @@ const ProductDetail = () => {
             <p className="text-lg text-playful-foreground/80 mb-8">
               The treasure you're looking for seems to have vanished!
             </p>
-            <Link to="/products">
+            <Link href="/products">
               <Button variant="default" size="lg">
                 Back to All Treasures
               </Button>
@@ -231,9 +234,9 @@ const ProductDetail = () => {
         <div className="max-w-6xl mx-auto">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm text-playful-foreground/80 mb-6">
-            <Link to="/" className="hover:text-playful-primary font-semibold">Home</Link>
+            <Link href="/" className="hover:text-playful-primary font-semibold">Home</Link>
             <span>/</span>
-            <Link to="/products" className="hover:text-playful-primary font-semibold">Products</Link>
+            <Link href="/products" className="hover:text-playful-primary font-semibold">Products</Link>
             <span>/</span>
             <span className="text-playful-foreground font-bold">{product.name}</span>
           </div>

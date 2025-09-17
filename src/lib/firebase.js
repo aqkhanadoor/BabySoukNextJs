@@ -30,7 +30,7 @@ export const auth = getAuth(app);
 
 // Initialize Analytics in supported environments (browser only) and only in production
 try {
-  if (typeof window !== "undefined" && import.meta?.env?.PROD) {
+  if (typeof window !== "undefined" && process.env.NODE_ENV === "production") {
     analyticsIsSupported().then((supported) => {
       if (supported) {
         getAnalytics(app);

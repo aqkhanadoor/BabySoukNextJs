@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -151,7 +153,7 @@ const ProductsPage = () => {
             const snap = await get(dbRef(db, "products"));
             const val = snap.val();
             const list: any[] = val ? Object.values(val) : [];
-            const envBase = import.meta.env.VITE_SITE_URL?.replace(/\/$/, "");
+            const envBase = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
             const baseUrl = envBase || (typeof window !== 'undefined' ? window.location.origin : "https://example.com");
             const basePages = [
                 "/", "/products", "/categories", "/collections", "/search", "/cart", "/contact",

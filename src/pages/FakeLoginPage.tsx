@@ -1,6 +1,9 @@
+"use client";
+
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+import Link from 'next/link';
 
 const FakeLoginPage = () => {
     const [username, setUsername] = useState('');
@@ -144,7 +147,7 @@ const FakeLoginPage = () => {
                 )}
             </p>
             <p id="backtoblog" className="mt-4 text-sm">
-                <a href="/" className="text-[#007cba] hover:text-[#005a87]">← Back to Baby Souk</a>
+                <Link href="/" className="text-[#007cba] hover:text-[#005a87]">← Back to Baby Souk</Link>
             </p>
         </div>
     );

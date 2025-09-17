@@ -1,6 +1,8 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ToyBrick, Shirt, Heart, Sparkles } from "lucide-react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import toysImage from "@/assets/toys-category.jpg";
@@ -67,7 +69,7 @@ const Categories = () => {
               >
                 <div className="relative h-64 overflow-hidden">
                   <img
-                    src={category.image}
+                    src={category.image.src}
                     alt={category.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
@@ -99,7 +101,7 @@ const Categories = () => {
                   </div>
 
                   <div className="mt-auto">
-                    <Link to={`/products?category=${encodeURIComponent(category.category)}`}>
+                    <Link href={`/products?category=${encodeURIComponent(category.category)}`}>
                       <Button
                         variant="playful"
                         size="lg"
@@ -121,13 +123,13 @@ const Categories = () => {
               No worries! Just jump into our full treasure chest of products and find your new favorite thing.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/products">
+              <Link href="/products">
                 <Button variant="playful" size="lg" className="bg-white text-playful-primary hover:bg-gray-100 hover:animate-wiggle">
                   View All Products
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-              <Link to="/collections">
+              <Link href="/collections">
                 <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-playful-primary">
                   Browse Collections
                   <Sparkles className="ml-2 h-5 w-5" />

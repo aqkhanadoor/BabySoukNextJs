@@ -1,6 +1,8 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Baby, Shirt, Heart, Sparkles } from "lucide-react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import toysImage from "@/assets/toys-category.jpg";
@@ -57,12 +59,12 @@ const Collections = () => {
             {categories.map((category) => (
               <Link
                 key={category.id}
-                to={`/products?category=${encodeURIComponent(category.category)}`}
+                href={`/products?category=${encodeURIComponent(category.category)}`}
                 className="group bg-white rounded-2xl border-2 border-black shadow-2d hover:shadow-2d-hover transform hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden"
               >
                 <div className="relative h-56">
                   <img
-                    src={category.image}
+                    src={category.image.src}
                     alt={category.title}
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                   />
@@ -95,7 +97,7 @@ const Collections = () => {
             <p className="text-lg mb-6 max-w-2xl mx-auto">
               Everything you need for your baby's first year, from sleepy time to playtime. Made by parents, for parents!
             </p>
-            <Link to="/products">
+            <Link href="/products">
               <Button variant="playful" size="xl" className="bg-white text-playful-primary hover:bg-gray-100">
                 Explore All Products
                 <ArrowRight className="ml-2 h-5 w-5" />

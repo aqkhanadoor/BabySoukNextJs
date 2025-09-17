@@ -1,5 +1,7 @@
+"use client";
+
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { db } from "@/lib/firebase";
 import { onValue, ref as dbRef } from "firebase/database";
 import {
@@ -90,7 +92,7 @@ const SecondaryHero = () => {
         return isExternal ? (
             <a href={href} target="_blank" rel="noopener noreferrer" className="block group">{content}</a>
         ) : (
-            <Link to={href} className="block group">{content}</Link>
+            <Link href={href} className="block group">{content}</Link>
         );
     };
 

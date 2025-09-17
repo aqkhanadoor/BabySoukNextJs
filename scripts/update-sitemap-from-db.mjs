@@ -1,6 +1,13 @@
 #!/usr/bin/env node
 /**
- * Fetch latest sitemap XML from Firebase Realtime Database and write to public/sitemap.xml
+ * OPTIONAL DEPLOYMENT SCRIPT - Fetch latest sitemap XML from Firebase Realtime Database
+ * 
+ * NOTE: The application now serves dynamic sitemaps at /sitemap.xml via API route.
+ * This script is only needed if you prefer to pre-generate static sitemap files 
+ * during deployment instead of serving them dynamically.
+ * 
+ * The dynamic route (app/sitemap.xml/route.ts) is preferred for most use cases.
+ * 
  * Requires env vars:
  *  FIREBASE_DB_URL   (e.g. https://your-project-id-default-rtdb.firebaseio.com)
  *  (optional) FIREBASE_AUTH_TOKEN (database secret or REST auth token if rules require)

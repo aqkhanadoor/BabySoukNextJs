@@ -1,9 +1,11 @@
+"use client";
+
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import ProductCard from "./ProductCard";
 import { type Product } from "@/types/product";
 import { ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { db } from "@/lib/firebase";
 import { onValue, ref as dbRef } from "firebase/database";
 
@@ -97,7 +99,7 @@ const ProductsSection = () => {
 
         {/* View All Button */}
         <div className="text-center">
-          <Link to="/products">
+          <Link href="/products">
             <Button size="lg" className="group text-lg shadow-2d hover:shadow-none transition-all transform hover:-translate-y-1">
               See More Stuff
               <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />

@@ -1,10 +1,12 @@
+"use client";
+
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { useCart } from "@/contexts/CartContext";
 import whatsappIcon from "@/assets/whatsapp-icon.png";
 
@@ -65,7 +67,7 @@ const Cart = () => {
             <p className="text-lg text-playful-foreground/80 mb-8">
               Looks like you haven't found any treasures yet. Let's go find some!
             </p>
-            <Link to="/products">
+            <Link href="/products">
               <Button variant="default" size="lg" className="animate-shake">
                 Start Shopping
               </Button>
@@ -93,7 +95,7 @@ const Cart = () => {
                 <Card key={item.id} className="p-4">
                   <div className="flex items-center gap-4">
                     {/* Product Image */}
-                    <Link to={`/product/${item.product.slug || item.product.id}`}>
+                    <Link href={`/product/${item.product.slug || item.product.id}`}>
                       <img
                         src={(item.product as any).image || (item.product.images && item.product.images[0]) || '/placeholder.svg'}
                         alt={item.product.name}
@@ -103,7 +105,7 @@ const Cart = () => {
 
                     {/* Product Details */}
                     <div className="flex-1">
-                      <Link to={`/product/${item.product.slug || item.product.id}`}>
+                      <Link href={`/product/${item.product.slug || item.product.id}`}>
                         <h3 className="font-semibold text-lg text-playful-foreground mb-1 hover:text-playful-primary transition-colors cursor-pointer">
                           {item.product.name}
                         </h3>
@@ -207,14 +209,14 @@ const Cart = () => {
                     onClick={handleWhatsAppCheckout}
                   >
                     <img
-                      src={whatsappIcon}
+                      src={whatsappIcon.src}
                       alt="WhatsApp"
                       className="w-6 h-6"
                     />
                     Checkout on WhatsApp
                   </Button>
 
-                  <Link to="/products">
+                  <Link href="/products">
                     <Button variant="outline" size="lg" className="w-full">
                       Continue Shopping
                     </Button>
