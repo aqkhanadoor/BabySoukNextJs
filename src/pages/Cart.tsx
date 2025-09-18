@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { useCart } from "@/contexts/CartContext";
-import whatsappIcon from "@/assets/whatsapp-icon.png";
+const whatsappIcon = { src: "/assets/whatsapp-icon.png" };
 
 const Cart = () => {
   const { state, updateQuantity, removeFromCart } = useCart();

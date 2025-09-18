@@ -1,15 +1,16 @@
-import teddyBearImg from "@/assets/products/teddy-bear.jpg";
-import babyOnesieImg from "@/assets/products/baby-onesie.jpg";
-import babyCareSetImg from "@/assets/products/baby-care-set.jpg";
-import buildingBlocksImg from "@/assets/products/building-blocks.jpg";
-import winterJacketImg from "@/assets/products/winter-jacket.jpg";
-import babySoapImg from "@/assets/products/baby-soap.jpg";
-import feedingBottlesImg from "@/assets/products/feeding-bottles.jpg";
-import musicalToyImg from "@/assets/products/musical-toy.jpg";
-import sleepSuitImg from "@/assets/products/sleep-suit.jpg";
-import massageOilImg from "@/assets/products/massage-oil.jpg";
-import highChairImg from "@/assets/products/high-chair.jpg";
-import babyWalkerImg from "@/assets/products/baby-walker.jpg";
+// Use direct paths to images in public directory
+const teddyBearImg = "/assets/products/teddy-bear.jpg";
+const babyOnesieImg = "/assets/products/baby-onesie.jpg";
+const babyCareSetImg = "/assets/products/baby-care-set.jpg";
+const buildingBlocksImg = "/assets/products/building-blocks.jpg";
+const winterJacketImg = "/assets/products/winter-jacket.jpg";
+const babySoapImg = "/assets/products/baby-soap.jpg";
+const feedingBottlesImg = "/assets/products/feeding-bottles.jpg";
+const musicalToyImg = "/assets/products/musical-toy.jpg";
+const sleepSuitImg = "/assets/products/sleep-suit.jpg";
+const massageOilImg = "/assets/products/massage-oil.jpg";
+const highChairImg = "/assets/products/high-chair.jpg";
+const babyWalkerImg = "/assets/products/baby-walker.jpg";
 
 export interface Product {
   id: string;

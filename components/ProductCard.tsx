@@ -33,7 +33,19 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const { addToCart } = useCart();
   const { toast } = useToast();
   const discountPercentage = Math.round(((product.mrp - product.specialPrice) / product.mrp) * 100);
-  const randomRating = Math.floor(Math.random() * 2) + 4; // Random rating between 4-5
+
+  // Generate consistent rating based on product ID to avoid changing ratings
+  const generateConsistentRating = (productId: string) => {
+    let hash = 0;
+    for (let i = 0; i < productId.length; i++) {
+      const char = productId.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
+    return Math.abs(hash % 2) + 4; // Consistent rating between 4-5
+  };
+
+  const consistentRating = generateConsistentRating(product.id);
 
   const handleAddToCart = async () => {
     setIsAddingToCart(true);
@@ -140,7 +152,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star
                   key={i}
-                  className={`h-4 w-4 ${i < randomRating
+                  className={`h-4 w-4 ${i < consistentRating
                     ? 'fill-yellow-400 text-yellow-400'
                     : 'text-gray-300'
                     }`}
@@ -148,7 +160,16 @@ const ProductCard = ({ product }: ProductCardProps) => {
               ))}
             </div>
             <span className="text-sm text-playful-foreground/70">
-              ({Math.floor(Math.random() * 50) + 10})
+              ({(() => {
+                // Generate consistent review count based on product ID
+                let hash = 0;
+                for (let i = 0; i < product.id.length; i++) {
+                  const char = product.id.charCodeAt(i);
+                  hash = ((hash << 5) - hash) + char;
+                  hash = hash & hash;
+                }
+                return Math.abs(hash % 50) + 10;
+              })()})
             </span>
           </div>
 

@@ -5,9 +5,9 @@ import { ArrowRight, Baby, Shirt, Heart, Sparkles } from "lucide-react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import toysImage from "@/assets/toys-category.jpg";
-import clothingImage from "@/assets/clothing-category.jpg";
-import careImage from "@/assets/care-category.jpg";
+const toysImage = { src: "/assets/toys-category.jpg" };
+const clothingImage = { src: "/assets/clothing-category.jpg" };
+const careImage = { src: "/assets/care-category.jpg" };
 
 const categories = [
   {

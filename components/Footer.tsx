@@ -108,6 +108,13 @@ const Footer = () => {
                 <span className="group-hover:text-playful-primary transition-colors font-medium">Returns</span>
               </Link>
 
+              <Link href="/cancellation" className="flex items-center gap-3 p-3 rounded-lg hover:bg-playful-background/5 transition-all group">
+                <div className="w-8 h-8 rounded-full bg-red-400/20 flex items-center justify-center group-hover:bg-red-400/30 transition-colors">
+                  <span className="text-red-400 text-lg font-bold">✕</span>
+                </div>
+                <span className="group-hover:text-playful-primary transition-colors font-medium">Cancellation</span>
+              </Link>
+
               <Link href="/terms" className="flex items-center gap-3 p-3 rounded-lg hover:bg-playful-background/5 transition-all group">
                 <div className="w-8 h-8 rounded-full bg-playful-accent/20 flex items-center justify-center group-hover:bg-playful-accent/30 transition-colors">
                   <Shield className="h-4 w-4 text-playful-accent" />

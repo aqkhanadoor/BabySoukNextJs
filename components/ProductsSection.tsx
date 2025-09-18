@@ -8,6 +8,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { realtimeDb } from "@/lib/firebase";
 import { onValue, ref as dbRef } from "firebase/database";
+import { products as staticProducts } from "@/data/products";
 
 type FBProductRecord = {
   name: string;
@@ -24,13 +25,22 @@ type FBProductRecord = {
 const ProductsSection = () => {
   const [remoteProducts, setRemoteProducts] = useState<Product[]>([]);
   const [loaded, setLoaded] = useState(false);
+  const [useFirebase, setUseFirebase] = useState(true);
 
   useEffect(() => {
+    if (!useFirebase) {
+      setRemoteProducts(staticProducts.slice(0, 8));
+      setLoaded(true);
+      return;
+    }
+
     const ref = dbRef(realtimeDb, "products");
     const unsub = onValue(ref, (snap) => {
       const val = snap.val() as Record<string, FBProductRecord> | null;
       if (!val) {
-        setRemoteProducts([]);
+        // Fallback to static products if Firebase is empty
+        console.log("Firebase products empty, using static products");
+        setRemoteProducts(staticProducts.slice(0, 8));
         setLoaded(true);
         return;
       }
@@ -40,7 +50,8 @@ const ProductsSection = () => {
           const dr = typeof p.discountRate === "number" ? p.discountRate : 0;
           const mrp = price;
           const specialPrice = dr ? Math.round(price * (100 - dr) / 100) : price;
-          const image = Array.isArray(p.images) && p.images[0] ? p.images[0] : "/placeholder.svg";
+          // Ensure images array is properly handled
+          const images = Array.isArray(p.images) && p.images.length > 0 ? p.images : ["/placeholder.svg"];
           const createdAtNum = typeof p.createdAt === "number" ? p.createdAt : 0;
           const dateStr = createdAtNum ? new Date(createdAtNum).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10);
           const prod: Product & { _createdAt?: number } = {
@@ -48,7 +59,7 @@ const ProductsSection = () => {
             name: p.name,
             mrp,
             specialPrice,
-            image,
+            images, // Use images array instead of single image
             description: p.description || "",
             category: p.category || "Misc",
             subcategory: p.subcategory || "",
@@ -63,9 +74,13 @@ const ProductsSection = () => {
         .slice(0, 8);
       setRemoteProducts(mapped);
       setLoaded(true);
+    }, (error) => {
+      console.error("Firebase error, falling back to static products:", error);
+      setRemoteProducts(staticProducts.slice(0, 8));
+      setLoaded(true);
     });
     return () => unsub();
-  }, []);
+  }, [useFirebase]);
 
   const displayProducts = remoteProducts.slice(0, 8);
 

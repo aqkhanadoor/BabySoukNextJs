@@ -104,7 +104,21 @@ export const ProductImage = ({
     className?: string;
     priority?: boolean;
 }) => {
-    const imageSrc = product.images?.[imageIndex] || '/placeholder.svg';
+    // Handle both array and single image formats for compatibility
+    let imageSrc = '/placeholder.svg';
+
+    if (product.images && Array.isArray(product.images)) {
+        imageSrc = product.images[imageIndex] || product.images[0] || '/placeholder.svg';
+    } else if (product.image) {
+        // Fallback to single image property if images array doesn't exist
+        imageSrc = product.image;
+    }
+
+    // Ensure the image path is valid
+    if (!imageSrc || imageSrc === '' || imageSrc === 'undefined') {
+        imageSrc = '/placeholder.svg';
+    }
+
     const altText = `${product.name} - Premium ${product.category} for babies | Baby Souk`;
 
     return (
