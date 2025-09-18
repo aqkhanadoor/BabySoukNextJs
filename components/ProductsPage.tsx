@@ -36,6 +36,7 @@ import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage
 import { ProductForm, ProductRecord } from '@/types/product';
 import { categories as staticCategories } from '@/config/categories';
 import { generateSitemapXml } from '@/lib/sitemap';
+import { autoRevalidateAfterProductChange, revalidateProducts, useRevalidation } from '@/lib/revalidation';
 
 const initialState: ProductForm = {
   name: "",
@@ -78,6 +79,9 @@ const ProductsPage = () => {
   const [deleting, setDeleting] = useState<Record<string, boolean>>({});
   const [regeneratingSitemap, setRegeneratingSitemap] = useState(false);
   const { toast } = useToast();
+  
+  // ISR Revalidation hook
+  const { revalidate: triggerRevalidation, isLoading: isRevalidating } = useRevalidation();
 
   // Update subcategory options when category changes
   useEffect(() => {
@@ -352,6 +356,19 @@ const ProductsPage = () => {
       // Regenerate sitemap after successful save
       regenerateSitemap().catch((e) => console.warn("Sitemap regeneration failed", e));
 
+      // Trigger ISR revalidation
+      try {
+        const operation = editKey ? 'update' : 'create';
+        await autoRevalidateAfterProductChange(operation, {
+          category: data.category,
+          slug: data.slug
+        });
+        console.log('ISR revalidation triggered successfully');
+      } catch (error) {
+        console.warn('ISR revalidation failed:', error);
+        // Don't show error to user as the product was saved successfully
+      }
+
       setForm(initialState);
       setEditKey(null);
       setSlugEdited(false);
@@ -493,6 +510,18 @@ const ProductsPage = () => {
 
       // Regenerate sitemap after successful deletion
       regenerateSitemap().catch((e) => console.warn("Sitemap regeneration failed", e));
+
+      // Trigger ISR revalidation
+      try {
+        await autoRevalidateAfterProductChange('delete', {
+          category: item.data.category,
+          slug: item.data.slug
+        });
+        console.log('ISR revalidation triggered successfully after deletion');
+      } catch (error) {
+        console.warn('ISR revalidation failed after deletion:', error);
+        // Don't show error to user as the product was deleted successfully
+      }
 
     } catch (e: any) {
       console.error(e);

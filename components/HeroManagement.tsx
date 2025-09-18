@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useRevalidation } from '@/lib/revalidation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -27,6 +28,7 @@ interface HeroSectionProps {
 
 const HeroManagement = ({ heroKey, title, description }: HeroSectionProps) => {
     const { toast } = useToast();
+    const { revalidate } = useRevalidation();
     const MAX_UPLOAD_BYTES = 200 * 1024; // 200 KB
 
     // State for images and files
@@ -227,6 +229,15 @@ const HeroManagement = ({ heroKey, title, description }: HeroSectionProps) => {
                 title: "Success",
                 description: `${title} updated successfully`
             });
+
+            // Trigger ISR revalidation for homepage
+            try {
+                await revalidate({ type: 'hero-content' });
+                console.log('Homepage ISR revalidation triggered successfully');
+            } catch (error) {
+                console.warn('ISR revalidation failed:', error);
+                // Don't show error to user as the hero was saved successfully
+            }
 
         } catch (error) {
             console.error('Error saving hero section:', error);

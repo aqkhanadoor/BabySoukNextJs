@@ -11,6 +11,10 @@ import StructuredData from "@/components/SEO/StructuredData";
 import { structuredDataTemplates } from "@/lib/seo-config";
 import { Metadata } from 'next';
 
+// Enable ISR with revalidation every 24 hours (86400 seconds)
+// This will be overridden by manual revalidation from admin panel
+export const revalidate = 86400; // 24 hours
+
 export const metadata: Metadata = {
     title: 'Baby Souk - Premium Baby Products & Toys Store in India',
     description: 'Discover the best baby products, toys, clothing, and care essentials at Baby Souk. Trusted by 1000+ happy parents across India. Premium quality, safe products, fast delivery. Shop now!',
