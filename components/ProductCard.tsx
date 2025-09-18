@@ -141,7 +141,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         {/* Product Info */}
         <div className="space-y-3 flex-grow flex flex-col">
           <Link href={productHref} className="flex-grow">
-            <h3 className="font-bold text-lg leading-tight line-clamp-2 text-playful-foreground hover:text-playful-primary transition-colors cursor-pointer min-h-[3.5rem] flex items-start">
+            <h3 className="font-bold text-lg leading-tight line-clamp-2 text-playful-foreground hover:text-playful-primary transition-colors cursor-pointer min-h-[3.5rem] flex items-start break-words">
               {product.name}
             </h3>
           </Link>

@@ -64,13 +64,13 @@ async function fetchProductsFromFirebase(): Promise<Product[]> {
   }
 }
 
-// Cache the products data for ISR
+// Cache the products data for ISR with long revalidation (manual triggers handle updates)
 export const getProducts = unstable_cache(
   fetchProductsFromFirebase,
   ['products'],
   {
     tags: ['products'],
-    revalidate: 3600, // 1 hour
+    revalidate: 86400 * 7, // 7 days (manual revalidation from admin panel)
   }
 );
 
@@ -99,7 +99,7 @@ export const getHeroContent = unstable_cache(
   ['hero-content'],
   {
     tags: ['hero'],
-    revalidate: 3600, // 1 hour
+    revalidate: 86400 * 7, // 7 days (manual revalidation from admin panel)
   }
 );
 

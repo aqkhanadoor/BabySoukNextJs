@@ -79,7 +79,7 @@ const ProductsPage = () => {
   const [deleting, setDeleting] = useState<Record<string, boolean>>({});
   const [regeneratingSitemap, setRegeneratingSitemap] = useState(false);
   const { toast } = useToast();
-  
+
   // ISR Revalidation hook
   const { revalidate: triggerRevalidation, isLoading: isRevalidating } = useRevalidation();
 

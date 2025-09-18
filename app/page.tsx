@@ -11,9 +11,8 @@ import StructuredData from "@/components/SEO/StructuredData";
 import { structuredDataTemplates } from "@/lib/seo-config";
 import { Metadata } from 'next';
 
-// Enable ISR with revalidation every 24 hours (86400 seconds)
-// This will be overridden by manual revalidation from admin panel
-export const revalidate = 86400; // 24 hours
+// Enable ISR with fallback revalidation (manual revalidation from admin panel handles updates)
+export const revalidate = 86400 * 7; // 7 days (admin panel triggers immediate updates)
 
 export const metadata: Metadata = {
     title: 'Baby Souk - Premium Baby Products & Toys Store in India',
@@ -51,9 +50,9 @@ export default function HomePage() {
             <StructuredData data={structuredDataTemplates.website} />
             <StructuredData data={structuredDataTemplates.localBusiness} />
 
-            <div className="min-h-screen bg-playful-background overflow-hidden">
+            <div className="min-h-screen bg-playful-background overflow-x-hidden">
                 <Header />
-                <main>
+                <main className="w-full">
                     <HeroSection />
                     <CategorySection />
                     <SecondaryHero />

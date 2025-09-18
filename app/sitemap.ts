@@ -111,4 +111,4 @@ export default function sitemap() {
     });
 }
 
-export const revalidate = 3600; // Revalidate every hour
+export const revalidate = 86400 * 3; // 3 days (sitemap regenerates automatically with product changes)

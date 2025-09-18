@@ -85,9 +85,9 @@ const Header = () => {
   };
 
   return (
-    <header className="w-full bg-playful-background border-b-4 border-playful-foreground shadow-2d sticky top-0 z-50">
+    <header className="w-full bg-playful-background border-b-4 border-playful-foreground shadow-2d sticky top-0 z-50 overflow-x-hidden">
       {/* Main navigation */}
-      <div className="container mx-auto px-4 py-3">
+      <div className="container mx-auto px-4 py-3 w-full max-w-full">
         {/* Mobile Layout */}
         <div className="flex md:hidden items-center justify-between">
           {/* Mobile Menu Button - Left */}
@@ -148,14 +148,14 @@ const Header = () => {
                     <Link href="/categories" className="w-full h-full flex items-center">Collections</Link>
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                    <ul className="grid gap-3 p-4 w-[90vw] max-w-[600px] grid-cols-1 md:grid-cols-2">
                       {categories.map((category) => (
                         <ListItem
                           key={category.name}
                           title={category.name}
                           href={`/products?category=${category.name}`}
                         >
-                          {category.subcategories.join(", ")}
+                          {category.subcategories.slice(0, 3).join(", ")}{category.subcategories.length > 3 ? "..." : ""}
                         </ListItem>
                       ))}
                     </ul>
@@ -227,7 +227,7 @@ const Header = () => {
       {isMobileMenuOpen && (
         <div className="fixed inset-0 bg-black/60 z-50 md:hidden" onClick={toggleMobileMenu}>
           <div
-            className="fixed left-0 top-0 h-full w-3/4 max-w-sm bg-playful-background border-r-4 border-playful-foreground shadow-2xl animate-slide-in-right"
+            className="fixed left-0 top-0 h-full w-[80vw] max-w-sm bg-playful-background border-r-4 border-playful-foreground shadow-2xl animate-slide-in-right overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Mobile Menu Header */}

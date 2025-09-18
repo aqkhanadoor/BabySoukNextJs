@@ -18,7 +18,7 @@ import { realtimeDb as db } from "@/lib/firebase";
 import { onValue, ref as dbRef } from "firebase/database";
 
 interface ProductsPageClientProps {
-  initialProducts?: Product[];
+    initialProducts?: Product[];
 }
 
 export default function ProductsPageClient({ initialProducts = [] }: ProductsPageClientProps) {
@@ -204,10 +204,10 @@ export default function ProductsPageClient({ initialProducts = [] }: ProductsPag
         <>
             <StructuredData data={productsSchema} />
 
-            <div className="min-h-screen bg-playful-background font-sans">
+            <div className="min-h-screen bg-playful-background font-sans overflow-x-hidden">
                 <Header />
-                <main className="py-8 px-4">
-                    <div className="max-w-7xl mx-auto">
+                <main className="py-8 px-4 w-full">
+                    <div className="max-w-7xl mx-auto w-full">
                         {/* Breadcrumbs */}
                         <Breadcrumbs items={breadcrumbItems} />
 
@@ -220,8 +220,8 @@ export default function ProductsPageClient({ initialProducts = [] }: ProductsPag
                             </p>
                         </div>
 
-                        <div className="bg-white rounded-2xl border-2 border-playful-foreground shadow-2d p-6 mb-8">
-                            <div className="flex flex-col gap-4">
+                        <div className="bg-white rounded-2xl border-2 border-playful-foreground shadow-2d p-6 mb-8 w-full overflow-hidden">
+                            <div className="flex flex-col gap-4 w-full">
                                 <div className="relative max-w-md mx-auto w-full">
                                     <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-playful-foreground/50 h-5 w-5" />
                                     <Input
@@ -234,12 +234,12 @@ export default function ProductsPageClient({ initialProducts = [] }: ProductsPag
                                 </div>
 
                                 <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
-                                    <div className="flex flex-wrap gap-4 flex-1 justify-center">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 flex-1 w-full">
                                         <Select value={selectedCategory} onValueChange={(value) => {
                                             setSelectedCategory(value);
                                             setSelectedSubcategory("all");
                                         }}>
-                                            <SelectTrigger className="w-full md:w-48">
+                                            <SelectTrigger className="w-full">
                                                 <SelectValue placeholder="All Categories" />
                                             </SelectTrigger>
                                             <SelectContent>
@@ -254,7 +254,7 @@ export default function ProductsPageClient({ initialProducts = [] }: ProductsPag
 
                                         {availableSubcategories.length > 0 && (
                                             <Select value={selectedSubcategory} onValueChange={setSelectedSubcategory}>
-                                                <SelectTrigger className="w-full md:w-48">
+                                                <SelectTrigger className="w-full">
                                                     <SelectValue placeholder="All Subcategories" />
                                                 </SelectTrigger>
                                                 <SelectContent>
@@ -269,7 +269,7 @@ export default function ProductsPageClient({ initialProducts = [] }: ProductsPag
                                         )}
 
                                         <Select value={priceRange} onValueChange={setPriceRange}>
-                                            <SelectTrigger className="w-full md:w-48">
+                                            <SelectTrigger className="w-full">
                                                 <SelectValue placeholder="Price Range" />
                                             </SelectTrigger>
                                             <SelectContent>
@@ -282,7 +282,7 @@ export default function ProductsPageClient({ initialProducts = [] }: ProductsPag
                                         </Select>
 
                                         <Select value={sortBy} onValueChange={setSortBy}>
-                                            <SelectTrigger className="w-full md:w-48">
+                                            <SelectTrigger className="w-full">
                                                 <SelectValue placeholder="Sort By" />
                                             </SelectTrigger>
                                             <SelectContent>
