@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function ContactPage() {
     const handleSubmit = (e: React.FormEvent) => {
@@ -147,9 +148,11 @@ export default function ContactPage() {
                             <Card className="p-6 bg-gradient-to-br from-green-500 to-green-600 text-white">
                                 <div className="text-center">
                                     <div className="mb-4">
-                                        <img
+                                        <Image
                                             src="/assets/whatsapp-icon.png"
-                                            alt="WhatsApp"
+                                            alt="WhatsApp contact icon"
+                                            width={48}
+                                            height={48}
                                             className="w-12 h-12 mx-auto"
                                         />
                                     </div>

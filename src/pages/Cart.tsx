@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useCart } from "@/contexts/CartContext";
 const whatsappIcon = { src: "/assets/whatsapp-icon.png" };
 
@@ -96,9 +97,11 @@ const Cart = () => {
                   <div className="flex items-center gap-4">
                     {/* Product Image */}
                     <Link href={`/product/${item.product.slug || item.product.id}`}>
-                      <img
+                      <Image
                         src={(item.product as any).image || (item.product.images && item.product.images[0]) || '/placeholder.svg'}
-                        alt={item.product.name}
+                        alt={`${item.product.name} - Product image`}
+                        width={96}
+                        height={96}
                         className="w-24 h-24 object-contain rounded-lg bg-white border-2 border-playful-foreground/20 hover:scale-105 transition-transform cursor-pointer"
                       />
                     </Link>
@@ -208,9 +211,11 @@ const Cart = () => {
                     className="w-full mt-6 flex items-center justify-center gap-3 animate-wiggle"
                     onClick={handleWhatsAppCheckout}
                   >
-                    <img
+                    <Image
                       src={whatsappIcon.src}
-                      alt="WhatsApp"
+                      alt="WhatsApp checkout icon"
+                      width={24}
+                      height={24}
                       className="w-6 h-6"
                     />
                     Checkout on WhatsApp

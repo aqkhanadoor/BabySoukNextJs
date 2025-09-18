@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import Image from 'next/image';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -105,7 +106,7 @@ const ProductsPage = () => {
       .replace(/-+/g, "-");
 
   // Function to generate unique slug by checking existing slugs
-  const generateUniqueSlug = (baseSlug: string) => {
+  const generateUniqueSlug = useCallback((baseSlug: string) => {
     const existingSlugs = products.map(p => p.data.slug).filter(Boolean);
 
     // If editing, exclude current product's slug from check
@@ -122,7 +123,7 @@ const ProductsPage = () => {
     }
 
     return uniqueSlug;
-  };
+  }, [products, editKey]);
 
   // Auto-generate slug from name unless manually edited
   useEffect(() => {
@@ -133,13 +134,13 @@ const ProductsPage = () => {
         setForm((prev) => ({ ...prev, slug: uniqueSlug }));
       }
     }
-  }, [form.name, slugEdited, products, editKey]);
+  }, [form.name, slugEdited, generateUniqueSlug]);
 
   const handleImageFiles = (files: FileList | null) => {
     if (!files) return;
     const valid: File[] = [];
     let skippedType = 0;
-    let skippedSize: string[] = [];
+    const skippedSize: string[] = [];
     for (const f of Array.from(files)) {
       if (!f.type.startsWith("image/")) {
         skippedType++;
@@ -200,7 +201,7 @@ const ProductsPage = () => {
   };
 
   // Sitemap regeneration function
-  const regenerateSitemap = async () => {
+  const regenerateSitemap = useCallback(async () => {
     if (regeneratingSitemap) return;
     setRegeneratingSitemap(true);
 
@@ -254,7 +255,7 @@ const ProductsPage = () => {
     } finally {
       setRegeneratingSitemap(false);
     }
-  };
+  }, [regeneratingSitemap, products, toast]);
 
   const onSubmit = async () => {
     // Basic validation
@@ -415,7 +416,7 @@ const ProductsPage = () => {
     // Delay the check slightly to ensure products are fully loaded
     const timeout = setTimeout(checkAndUpdateSitemap, 1000);
     return () => clearTimeout(timeout);
-  }, [productsLoaded, products.length]);
+  }, [productsLoaded, products.length, regenerateSitemap]);
 
   // Derived filters and pagination
   const filteredProducts = useMemo(() => {
@@ -1233,7 +1234,7 @@ const ProductsPage = () => {
                   <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3">
                     {form.imagesUrls.map((u, idx) => (
                       <div key={`url-${idx}`} className="relative">
-                        <img src={u} alt="existing" className="h-28 w-full rounded-md object-cover" />
+                        <Image src={u} alt="Product image" width={112} height={112} className="h-28 w-full rounded-md object-cover" />
                         <Button type="button" size="icon" variant="destructive" className="absolute right-1 top-1 h-6 w-6" onClick={() => removeUrlAt(idx)}>
                           <X className="h-4 w-4" />
                         </Button>
@@ -1243,7 +1244,7 @@ const ProductsPage = () => {
                       const url = URL.createObjectURL(file);
                       return (
                         <div key={`file-${idx}`} className="relative">
-                          <img src={url} alt={file.name} className="h-28 w-full rounded-md object-cover" />
+                          <Image src={url} alt={`Preview of ${file.name}`} width={112} height={112} className="h-28 w-full rounded-md object-cover" />
                           <Button type="button" size="icon" variant="destructive" className="absolute right-1 top-1 h-6 w-6" onClick={() => removeFileAt(idx)}>
                             <X className="h-4 w-4" />
                           </Button>
@@ -1444,9 +1445,11 @@ const ProductsPage = () => {
                             {/* Product Image */}
                             <div className="aspect-square w-full mb-4 bg-muted rounded-lg overflow-hidden">
                               {p.data.images?.[0] ? (
-                                <img
+                                <Image
                                   src={p.data.images[0]}
-                                  alt={p.data.name}
+                                  alt={`${p.data.name} - Product image`}
+                                  width={200}
+                                  height={200}
                                   className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-200"
                                 />
                               ) : (

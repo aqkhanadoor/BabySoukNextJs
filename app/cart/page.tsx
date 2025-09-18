@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useCart } from "@/contexts/CartContext";
 
 export default function CartPage() {
@@ -129,9 +130,11 @@ export default function CartPage() {
                                         {/* Product image */}
                                         <Link href={`/product/${item.product.slug || item.product.id}`}>
                                             <div className="relative group">
-                                                <img
+                                                <Image
                                                     src={(item.product as any).image || (item.product.images && item.product.images[0]) || '/placeholder.svg'}
-                                                    alt={item.product.name}
+                                                    alt={`${item.product.name} - Product image`}
+                                                    width={96}
+                                                    height={96}
                                                     className="w-24 h-24 object-contain rounded-lg bg-white border-2 border-playful-foreground/20 hover:scale-105 transition-transform cursor-pointer shadow-sm"
                                                 />
                                                 <div className="absolute inset-0 bg-playful-primary/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -305,9 +308,11 @@ export default function CartPage() {
                                             className="w-full flex items-center justify-center gap-3 animate-wiggle shadow-2d hover:shadow-xl transform hover:-translate-y-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
                                             onClick={handleWhatsAppCheckout}
                                         >
-                                            <img
+                                            <Image
                                                 src="/assets/whatsapp-icon.png"
-                                                alt="WhatsApp"
+                                                alt="WhatsApp icon"
+                                                width={24}
+                                                height={24}
                                                 className="w-6 h-6"
                                             />
                                             <span className="font-semibold">Checkout on WhatsApp</span>

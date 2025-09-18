@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ToyBrick, Shirt, Heart, Sparkles } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 const toysImage = { src: "/assets/toys-category.jpg" };
@@ -68,9 +69,11 @@ const Categories = () => {
                 className="group bg-white rounded-2xl border-2 border-black shadow-2d overflow-hidden transition-transform duration-300 hover:-translate-y-2 flex flex-col"
               >
                 <div className="relative h-64 overflow-hidden">
-                  <img
+                  <Image
                     src={category.image.src}
-                    alt={category.title}
+                    alt={`${category.title} - ${category.description}`}
+                    width={400}
+                    height={256}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>

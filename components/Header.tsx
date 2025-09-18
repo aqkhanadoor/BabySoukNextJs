@@ -52,15 +52,12 @@ const Header = () => {
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
 
-  // Safe cart usage that works during SSR
-  let cartState = { items: [], total: 0, itemCount: 0 };
-  try {
-    const { state } = useCart();
-    cartState = state;
-  } catch (error) {
-    // During SSR or when not in CartProvider context, use empty cart
-    console.log("Cart context not available during SSR");
-  }
+  // Safe cart usage - always call hooks at the top level
+  const defaultCartState = { items: [], total: 0, itemCount: 0 };
+
+  // Always call useCart hook, but handle potential errors in the component
+  const cartContext = useCart();
+  const cartState = cartContext?.state || defaultCartState;
 
   useEffect(() => {
     setIsClient(true);

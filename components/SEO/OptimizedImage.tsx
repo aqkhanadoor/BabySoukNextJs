@@ -57,7 +57,6 @@ const OptimizedImage = ({
 
     const imageProps: any = {
         src: src || '/placeholder.svg',
-        alt: alt || 'Product image',
         quality,
         onLoad: handleLoad,
         onError: handleError,
@@ -82,12 +81,15 @@ const OptimizedImage = ({
         imageProps.blurDataURL = blurDataURL || defaultBlurDataURL;
     }
 
+    // Ensure alt text is always provided
+    const altText = alt || 'Optimized image';
+
     return (
         <>
             {isLoading && (
                 <div className={`absolute inset-0 bg-gray-200 animate-pulse ${className}`} />
             )}
-            <Image {...imageProps} />
+            <Image {...imageProps} alt={altText} />
         </>
     );
 };

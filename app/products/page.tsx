@@ -92,7 +92,7 @@ export default function ProductsPage() {
     }, []);
 
     const filteredProducts = useMemo(() => {
-        let filtered = remoteProducts.filter(product => {
+        const filtered = remoteProducts.filter(product => {
             if (searchTerm && !product.name.toLowerCase().includes(searchTerm.toLowerCase())) {
                 return false;
             }

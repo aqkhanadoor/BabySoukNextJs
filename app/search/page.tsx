@@ -89,7 +89,7 @@ export default function SearchResultsPage() {
     }, [selectedCategory]);
 
     const searchResults = useMemo(() => {
-        let filtered = remoteProducts.filter(product => {
+        const filtered = remoteProducts.filter(product => {
             if (searchTerm) {
                 const searchLower = searchTerm.toLowerCase();
                 const matchesSearch =

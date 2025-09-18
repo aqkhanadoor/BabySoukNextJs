@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -266,9 +267,11 @@ const HeroManagement = ({ heroKey, title, description }: HeroSectionProps) => {
                                 <div className="aspect-[3/2] w-full overflow-hidden rounded-md border bg-muted relative">
                                     {desktopImages[index] ? (
                                         <>
-                                            <img
+                                            <Image
                                                 src={desktopImages[index]}
-                                                alt={`Desktop ${index + 1}`}
+                                                alt={`Desktop hero image ${index + 1}`}
+                                                width={300}
+                                                height={200}
                                                 className="h-full w-full object-cover"
                                             />
                                             <Button
@@ -319,9 +322,11 @@ const HeroManagement = ({ heroKey, title, description }: HeroSectionProps) => {
                                 <div className="aspect-square w-full overflow-hidden rounded-md border bg-muted relative">
                                     {mobileImages[index] ? (
                                         <>
-                                            <img
+                                            <Image
                                                 src={mobileImages[index]}
-                                                alt={`Mobile ${index + 1}`}
+                                                alt={`Mobile hero image ${index + 1}`}
+                                                width={200}
+                                                height={200}
                                                 className="h-full w-full object-cover"
                                             />
                                             <Button

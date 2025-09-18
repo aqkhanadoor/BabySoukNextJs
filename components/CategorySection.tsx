@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Baby, Shirt, Heart } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const categories = [
   {
@@ -56,9 +57,11 @@ const CategorySection = () => {
             >
               {/* Image */}
               <div className="relative h-64 overflow-hidden rounded-t-2xl border-b-4 border-playful-foreground">
-                <img
+                <Image
                   src={category.image}
-                  alt={category.title}
+                  alt={`${category.title} - ${category.description}`}
+                  width={400}
+                  height={256}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>

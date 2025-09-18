@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Baby, Shirt, Heart, Sparkles } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 const categories = [
@@ -58,9 +59,11 @@ export default function CollectionsPage() {
                                 className="group bg-white rounded-2xl border-2 border-black shadow-2d hover:shadow-2d-hover transform hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden"
                             >
                                 <div className="relative h-56">
-                                    <img
+                                    <Image
                                         src={category.image}
-                                        alt={category.title}
+                                        alt={`${category.title} - ${category.description}`}
+                                        width={400}
+                                        height={224}
                                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                                     />
                                     <div className={`absolute top-4 right-4 p-3 rounded-full text-white ${category.bgColor} animate-wiggle`}>

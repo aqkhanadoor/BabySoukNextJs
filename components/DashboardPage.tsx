@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import Image from 'next/image';
 import {
     ShoppingCart,
     Package,
@@ -284,9 +285,11 @@ const DashboardPage = () => {
                                             <div className="flex items-center space-x-3">
                                                 <div className="h-12 w-12 bg-muted rounded-md flex items-center justify-center">
                                                     {product.data.images?.[0] ? (
-                                                        <img
+                                                        <Image
                                                             src={product.data.images[0]}
-                                                            alt={product.data.name}
+                                                            alt={`${product.data.name} - Product thumbnail`}
+                                                            width={48}
+                                                            height={48}
                                                             className="h-full w-full object-cover rounded-md"
                                                         />
                                                     ) : (
@@ -360,9 +363,11 @@ const DashboardPage = () => {
                                                 <div className="flex items-center space-x-3">
                                                     <div className="h-8 w-8 bg-muted rounded-md flex items-center justify-center">
                                                         {product.data.images?.[0] ? (
-                                                            <img
+                                                            <Image
                                                                 src={product.data.images[0]}
-                                                                alt={product.data.name}
+                                                                alt={`${product.data.name} - Out of stock product`}
+                                                                width={32}
+                                                                height={32}
                                                                 className="h-full w-full object-cover rounded-md"
                                                             />
                                                         ) : (

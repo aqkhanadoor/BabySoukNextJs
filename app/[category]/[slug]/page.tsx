@@ -9,6 +9,7 @@ import StructuredData, { createProductSchema } from "@/components/SEO/Structured
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import Image from "next/image";
 import { type Product } from "@/types/product";
 import { ShoppingCart, Heart, Share2, ArrowLeft, Star, ShieldCheck, Truck, RotateCcw, Wand2 } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
@@ -238,9 +239,11 @@ export default function ProductDetailPage() {
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                             <div className="space-y-4">
                                 <div className="relative overflow-hidden rounded-2xl border-2 border-playful-foreground shadow-2d bg-white">
-                                    <img
+                                    <Image
                                         src={selectedImage || product.images[0]}
-                                        alt={product.name}
+                                        alt={`${product.name} - Main product image`}
+                                        width={500}
+                                        height={500}
                                         className="w-full h-96 lg:h-[500px] object-contain"
                                     />
                                     {discountPercentage > 0 && (
@@ -262,7 +265,7 @@ export default function ProductDetailPage() {
                                                 onClick={() => setSelectedImage(img)}
                                                 className={`rounded-lg overflow-hidden border-2 ${selectedImage === img ? 'border-playful-primary' : 'border-transparent'}`}
                                             >
-                                                <img src={img} alt={`${product.name} thumbnail ${index + 1}`} className="w-full h-24 object-cover" />
+                                                <Image src={img} alt={`${product.name} thumbnail ${index + 1}`} width={96} height={96} className="w-full h-24 object-cover" />
                                             </button>
                                         ))}
                                     </div>
